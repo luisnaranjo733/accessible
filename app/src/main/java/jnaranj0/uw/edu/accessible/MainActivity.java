@@ -62,29 +62,3 @@ public class MainActivity extends AppCompatActivity implements HierarchyFragment
         ssid.delete();
     }
 }
-
-
-/*
-        final HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("44:d9:e7:02:33:92", "AP_luis_room_?");
-        hashMap.put("44:d9:e7:03:33:92", "AP_luis_room_n");
-        hashMap.put("46:d9:e7:04:33:92", "AP_luis_room_ac");
-        hashMap.put("44:d9:e7:f6:02:e2", "AP_nakagawa_room_?");
-        hashMap.put("44:d9:e7:f9:6d:ce", "AP_joes_room_?");
-        hashMap.put("44:d9:e7:f9:7e:39", "AP_dions_room_?");
-        hashMap.put("44:d9:e7:f9:79:3c", "AP_andys_room_?");
-        hashMap.put("44:d9:e7:f9:7a:0b", "AP_red_room_?");
-
-                wifiManager.startScan();
-
-        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-        // may be null
-        String bssid = wifiInfo.getBSSID();
-        String nickname = hashMap.get(bssid);
-        Log.v(TAG, "" + bssid + " " + nickname);
-        List<ScanResult> results = wifiManager.getScanResults();
-        for (int i=0; i < results.size(); i++) {
-            ScanResult result = results.get(i);
-            Log.v(TAG, "" + i + ": " + result.BSSID + " " + hashMap.get(result.BSSID));
-        }
- */
