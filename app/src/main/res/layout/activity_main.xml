@@ -10,17 +10,18 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="jnaranj0.uw.edu.accessible.MainActivity">
 
-    <TextView
-        android:id="@+id/textViewUpdateBSSID"
+    <FrameLayout
+        android:id="@+id/topPane"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:layout_height="0dp"
+        android:layout_weight="0.40">
+    </FrameLayout>
 
-    <Button
-        android:id="@+id/buttonUpdateBSSID"
+    <FrameLayout
+        android:id="@+id/bottomPane"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Update BSSID"
-        />
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
+    </FrameLayout>
 </LinearLayout>
