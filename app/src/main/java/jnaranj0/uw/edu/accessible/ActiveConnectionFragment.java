@@ -7,6 +7,7 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,8 @@ import android.widget.TextView;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 /**
@@ -30,6 +33,11 @@ public class ActiveConnectionFragment extends Fragment {
     private TextView currentBSSID;
     private TextView currentRssi;
     private Button rememberWAPButton;
+
+    private WifiManager wifiManager;
+    private boolean activityStopped;
+    private Handler handler;
+    private Runnable runnable;
 
     public ActiveConnectionFragment() {
         // Required empty public constructor
@@ -49,8 +57,41 @@ public class ActiveConnectionFragment extends Fragment {
             rememberWAPButton = (Button) rootView.findViewById(R.id.rememberWAPButton);
 
         }
+        if (wifiManager == null) {
+            wifiManager = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
+        }
 
-        WifiManager wifiManager = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                Log.v(TAG, "Updating");
+                updateUI();
+                if (!activityStopped) {
+                    handler.postDelayed(this, 100);
+                }
+
+            }
+        };
+
+        return rootView;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        activityStopped = true;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        activityStopped = false;
+        handler = new Handler();
+        handler.postDelayed(runnable, 500);
+
+    }
+
+    public void updateUI() {
         int wifiState = wifiManager.getWifiState();
 
         String wifiStateRepr = "";
@@ -81,9 +122,7 @@ public class ActiveConnectionFragment extends Fragment {
             currentBSSID.setText("");
             currentRssi.setText("");
         }
-        return rootView;
     }
-
 }
 
 /*

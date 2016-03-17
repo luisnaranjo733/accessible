@@ -21,6 +21,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity implements HierarchyFragment.OnSSIDClickedListener {
     public static final String TAG = "**accessible";
@@ -47,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements HierarchyFragment
         ft.add(R.id.topPane, activeConnectionFragment, null);
         ft.add(R.id.bottomPane, hierarchyFragment , null);
         ft.commit();
-
     }
 
     @Override
