@@ -1,6 +1,7 @@
 package jnaranj0.uw.edu.accessible;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -21,12 +22,28 @@ import java.util.List;
 public class HierarchyFragment extends Fragment {
     public static final String TAG = "**HierarchyFrag";
 
-    SSIDAdapter ssidAdapter;
+    public SSIDAdapter ssidAdapter;
+    private OnSSIDClickedListener callback;
+
+    public interface OnSSIDClickedListener {
+        public void onSSIDClicked(SSID ssid);
+        public void onSSIDLongPressed(SSID ssid);
+    }
 
     public HierarchyFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onAttach(Context context){
+        super.onAttach(context);
+
+        try {
+            callback = (OnSSIDClickedListener) context;
+        }catch(ClassCastException e){
+            throw new ClassCastException(context.toString() + " must implement OnSSIDClickedListener");
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,11 +53,7 @@ public class HierarchyFragment extends Fragment {
 
         // create array adapter for ssids
         List<SSID> ssids = SSID.listAll(SSID.class);
-        Log.v(TAG, "Viewing ssids");
-        for (int i=0; i < ssids.size(); i++) {
-            SSID item = ssids.get(i);
-            Log.v(TAG, "" + item.ssid);
-        }
+
         // wouldn't it always be null in this method?
         if (ssidAdapter == null) {
             ssidAdapter = new SSIDAdapter(getActivity(), ssids);
@@ -53,8 +66,17 @@ public class HierarchyFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.v(TAG, "Item clicked!");
                 SSID ssid = (SSID) parent.getItemAtPosition(position);
+                ((OnSSIDClickedListener) getActivity()).onSSIDClicked(ssid);
+            }
+        });
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                SSID ssid = (SSID) parent.getItemAtPosition(position);
+                ((OnSSIDClickedListener) getActivity()).onSSIDLongPressed(ssid);
+                return true;
             }
         });
 

@@ -22,11 +22,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements HierarchyFragment.OnSSIDClickedListener {
     public static final String TAG = "**accessible";
 
     FrameLayout topPane;
     FrameLayout bottomPane;
+    HierarchyFragment hierarchyFragment;
+    ActiveConnectionFragment activeConnectionFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,14 +39,28 @@ public class MainActivity extends AppCompatActivity {
         topPane = (FrameLayout) findViewById(R.id.topPane);
         bottomPane = (FrameLayout) findViewById(R.id.bottomPane);
 
+        hierarchyFragment = new HierarchyFragment();
+        activeConnectionFragment = new ActiveConnectionFragment();
+
         FragmentManager manager = getFragmentManager();
         FragmentTransaction ft = manager.beginTransaction();
-        ft.add(R.id.topPane, new ActiveConnectionFragment(), null);
-        ft.add(R.id.bottomPane, new HierarchyFragment(), null);
+        ft.add(R.id.topPane, activeConnectionFragment, null);
+        ft.add(R.id.bottomPane, hierarchyFragment , null);
         ft.commit();
 
     }
 
+    @Override
+    public void onSSIDClicked(SSID ssid) {
+        Log.v(TAG, "Clicked: " + ssid.toString());
+    }
+
+    @Override
+    public void onSSIDLongPressed(SSID ssid) {
+        Log.v(TAG, "Long pressed: " + ssid.toString());
+        hierarchyFragment.ssidAdapter.remove(ssid);
+        ssid.delete();
+    }
 }
 
 

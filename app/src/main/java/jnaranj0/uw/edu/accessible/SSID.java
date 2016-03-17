@@ -18,6 +18,6 @@ public class SSID extends SugarRecord {
     }
 
     public String toString() {
-        return ssid;
+        return ssid + this.getId();
     }
 }
