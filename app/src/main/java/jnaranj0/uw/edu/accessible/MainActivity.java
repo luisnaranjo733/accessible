@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 
         topPane = (FrameLayout) findViewById(R.id.topPane);
-        bottomPane = (FrameLayout) findViewById(R.id.bottomPane);;
+        bottomPane = (FrameLayout) findViewById(R.id.bottomPane);
 
         FragmentManager manager = getFragmentManager();
         FragmentTransaction ft = manager.beginTransaction();
