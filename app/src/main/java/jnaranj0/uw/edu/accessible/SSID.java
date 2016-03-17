@@ -16,4 +16,8 @@ public class SSID extends SugarRecord {
     public SSID(String ssid) {
         this.ssid = ssid;
     }
+
+    public String toString() {
+        return ssid;
+    }
 }
