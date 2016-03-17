@@ -51,31 +51,35 @@ public class ActiveConnectionFragment extends Fragment {
         }
 
         WifiManager wifiManager = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
+        int wifiState = wifiManager.getWifiState();
 
-        if (wifiManager.getWifiState() == WifiManager.WIFI_STATE_ENABLED) {
+        String wifiStateRepr = "";
+        if (wifiState == WifiManager.WIFI_STATE_DISABLED) {
+            wifiStateRepr = "disabled";
+        } else if (wifiState == WifiManager.WIFI_STATE_DISABLING) {
+            wifiStateRepr = "disabling";
+        } else if (wifiState == WifiManager.WIFI_STATE_ENABLED) {
+            wifiStateRepr = "enabled";
+        } else if (wifiState == WifiManager.WIFI_STATE_ENABLING) {
+            wifiStateRepr = "enabling";
+        } else if (wifiState == WifiManager.WIFI_STATE_UNKNOWN) {
+            wifiStateRepr = "unknown";
+        }
+        currentNetworkState.setText(wifiStateRepr);
+
+        if (wifiState == WifiManager.WIFI_STATE_ENABLED) {
             WifiInfo wifiInfo = wifiManager.getConnectionInfo();
 
-            int wifiState = wifiManager.getWifiState();
-            String wifiStateRepr = "";
-            if (wifiState == WifiManager.WIFI_STATE_DISABLED) {
-                wifiStateRepr = "disabled";
-            } else if (wifiState == WifiManager.WIFI_STATE_DISABLING) {
-                wifiStateRepr = "disabling";
-            } else if (wifiState == WifiManager.WIFI_STATE_ENABLED) {
-                wifiStateRepr = "enabled";
-            } else if (wifiState == WifiManager.WIFI_STATE_ENABLING) {
-                wifiStateRepr = "enabling";
-            } else if (wifiState == WifiManager.WIFI_STATE_UNKNOWN) {
-                wifiStateRepr = "unknown";
-            }
-            currentNetworkState.setText(wifiStateRepr);
             currentSSID.setText(wifiInfo.getSSID());
             currentBSSID.setText(wifiInfo.getBSSID());
-            String signalStrength = "" + WifiManager.calculateSignalLevel()wifiInfo.getRssi();
-            currentRssi.setText("" + signalStrength));
+            String signalStrength = "" + wifiInfo.getRssi();
+            currentRssi.setText("" + signalStrength);
 
         } else {
             Log.v(TAG, "wifi disabled");
+            currentSSID.setText("");
+            currentBSSID.setText("");
+            currentRssi.setText("");
         }
         return rootView;
     }
