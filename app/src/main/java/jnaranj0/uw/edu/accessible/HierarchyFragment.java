@@ -26,8 +26,8 @@ public class HierarchyFragment extends Fragment {
     private OnSSIDClickedListener callback;
 
     public interface OnSSIDClickedListener {
-        public void onSSIDClicked(SSID ssid);
-        public void onSSIDLongPressed(SSID ssid);
+        void onSSIDClicked(SSID ssid);
+        void onSSIDLongPressed(SSID ssid);
     }
 
     public HierarchyFragment() {
@@ -54,10 +54,8 @@ public class HierarchyFragment extends Fragment {
         // create array adapter for ssids
         List<SSID> ssids = SSID.listAll(SSID.class);
 
-        // wouldn't it always be null in this method?
-        if (ssidAdapter == null) {
-            ssidAdapter = new SSIDAdapter(getActivity(), ssids);
-        }
+
+        ssidAdapter = new SSIDAdapter(getActivity(), ssids);
 
         ListView listView = (ListView) rootView.findViewById(R.id.listViewSSID);
         listView.setAdapter(ssidAdapter);

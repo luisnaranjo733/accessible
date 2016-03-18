@@ -3,9 +3,11 @@ package jnaranj0.uw.edu.accessible;
 
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -19,7 +21,7 @@ import java.util.List;
  */
 public class DetailSSIDFragment extends Fragment {
     public static final String TAG = "**DetailFrag";
-    public static final String BUNDLE_ARG_SSID_PK = "SSID_PK";;
+    public static final String BUNDLE_ARG_SSID_PK = "SSID_PK";
 
     public BSSIDAdapter bssidAdapter;
 
@@ -45,11 +47,17 @@ public class DetailSSIDFragment extends Fragment {
 
             List<BSSID> bssidList = ssid.getBSSIDs();
 
-            if (bssidAdapter == null) {
-                bssidAdapter = new BSSIDAdapter(getActivity(), bssidList);
-                ListView listView = (ListView) rootView.findViewById(R.id.listViewBSSID);
-                listView.setAdapter(bssidAdapter);
-            }
+            bssidAdapter = new BSSIDAdapter(getActivity(), bssidList);
+            ListView listView = (ListView) rootView.findViewById(R.id.listViewBSSID);
+            listView.setAdapter(bssidAdapter);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    BSSID bssid = (BSSID) parent.getItemAtPosition(position);
+                    Log.v(TAG, "Clicked on: " + bssid);
+                }
+            });
+
 
         }
 
