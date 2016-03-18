@@ -26,7 +26,9 @@ public class BSSIDAdapter extends ArrayAdapter<BSSID> {
         }
 
         TextView textViewBSSID = (TextView) convertView.findViewById(R.id.textViewBSSIDName);
+        TextView textViewBSSIDNickname = (TextView) convertView.findViewById(R.id.textViewBSSIDNickname);
         textViewBSSID.setText(bssid.bssid);
+        textViewBSSIDNickname.setText(bssid.nickname);
         // Return the completed view to render on screen
         return convertView;
     }

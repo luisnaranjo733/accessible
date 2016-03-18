@@ -43,8 +43,6 @@ public class MainActivity extends AppCompatActivity implements HierarchyFragment
      */
     @Override
     public void onSSIDClicked(SSID ssid) {
-        Log.v(TAG, "Clicked: " + ssid.toString());
-
         detailSSIDFragment = new DetailSSIDFragment();
         Bundle bundle = new Bundle();
         bundle.putLong(DetailSSIDFragment.BUNDLE_ARG_SSID_PK, ssid.getId());
@@ -68,7 +66,9 @@ public class MainActivity extends AppCompatActivity implements HierarchyFragment
         hierarchyFragment.ssidAdapter.remove(ssid);
         for (BSSID bssid : ssid.getBSSIDs()) {
             bssid.delete();
-            detailSSIDFragment.bssidAdapter.remove(bssid);
+            if (detailSSIDFragment != null && detailSSIDFragment.bssidAdapter != null) {
+                detailSSIDFragment.bssidAdapter.remove(bssid);
+            }
         }
         ssid.delete();
 
@@ -85,9 +85,14 @@ public class MainActivity extends AppCompatActivity implements HierarchyFragment
 
     @Override
     public void onRememberBSSID(BSSID bssid) {
-        if (detailSSIDFragment.bssidAdapter != null) {
+        if (detailSSIDFragment != null && detailSSIDFragment.bssidAdapter != null) {
             detailSSIDFragment.bssidAdapter.add(bssid);
         }
+    }
+
+    @Override
+    public void onSwitchToDetail(SSID ssid) {
+        onSSIDClicked(ssid);
     }
 
     @Override

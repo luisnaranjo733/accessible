@@ -1,18 +1,22 @@
 package jnaranj0.uw.edu.accessible;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.os.Handler;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,8 +44,9 @@ public class ActiveConnectionFragment extends Fragment {
     private Runnable runnable;
 
     public interface OnSSIDSavedListener {
-        public void onRememberSSID(SSID ssid);
-        public void onRememberBSSID(BSSID bssid);
+        void onRememberSSID(SSID ssid);
+        void onRememberBSSID(BSSID bssid);
+        void onSwitchToDetail(SSID ssid);
     }
 
 
@@ -80,47 +85,68 @@ public class ActiveConnectionFragment extends Fragment {
         rememberWAPButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (wifiManager.getWifiState() == WifiManager.WIFI_STATE_ENABLED) {
-                    WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-                    String ssidString = wifiInfo.getSSID();
-                    ssidString = ssidString.replaceAll("\"", "");
-                    String bssidString = wifiInfo.getBSSID();
 
-                    List<SSID> ssidResults = SSID.find(SSID.class, "ssid = ?", ssidString);
-                    boolean ssidCreated = false;
-                    if (ssidResults.size() == 0) {
-                        SSID ssid = new SSID(ssidString);
-                        ssid.save();
-                        ssidResults.add(ssid);
-                        ssidCreated = true;
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Title");
+
+// Set up the input
+                final EditText input = new EditText(getActivity());
+// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+                input.setInputType(InputType.TYPE_CLASS_TEXT);
+                builder.setView(input);
+
+// Set up the buttons
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String nickname = input.getText().toString();
+                        if (wifiManager.getWifiState() == WifiManager.WIFI_STATE_ENABLED) {
+                            WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+                            String ssidString = wifiInfo.getSSID();
+                            ssidString = ssidString.replaceAll("\"", "");
+                            String bssidString = wifiInfo.getBSSID();
+
+                            List<SSID> ssidResults = SSID.find(SSID.class, "ssid = ?", ssidString);
+                            boolean ssidCreated = false;
+                            if (ssidResults.size() == 0) {
+                                SSID ssid = new SSID(ssidString);
+                                ssid.save();
+                                ssidResults.add(ssid);
+                                ssidCreated = true;
+                            }
+                            SSID ssid = ssidResults.get(0);
+
+                            // and with our ssid?
+                            List<BSSID> bssidResults = BSSID.find(BSSID.class, "bssid = ?", bssidString);
+
+                            if (bssidResults.size() == 0) {
+                                BSSID bssid = new BSSID(nickname, bssidString, ssid);
+                                bssid.save();
+                                ((OnSSIDSavedListener) getActivity()).onRememberBSSID(bssid);
+                                Toast.makeText(getActivity(), "Saved bssid: " + bssidString, Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getActivity(), "Nothing to do!", Toast.LENGTH_SHORT).show();
+                            }
+
+                            if (ssidCreated) {
+                                ((OnSSIDSavedListener) getActivity()).onRememberSSID(ssid);
+                            }
+
+                            ((OnSSIDSavedListener) getActivity()).onSwitchToDetail(ssid);
+
+                        } else {
+                            Toast.makeText(getActivity(), "Wifi is not enabled", Toast.LENGTH_SHORT).show();
+                        }
                     }
-                    SSID ssid = ssidResults.get(0);
-
-                    // and with our ssid?
-                    List<BSSID> bssidResults = BSSID.find(BSSID.class, "bssid = ?", bssidString);
-
-                    if (bssidResults.size() == 0) {
-                        BSSID bssid = new BSSID("nickname", bssidString, ssid);
-                        bssid.save();
-                        ((OnSSIDSavedListener) getActivity()).onRememberBSSID(bssid);
-                        Toast.makeText(getActivity(), "Saved bssid: " + bssidString, Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getActivity(), "Nothing to do!", Toast.LENGTH_SHORT).show();
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
                     }
+                });
 
-                    if (ssidCreated) {
-                        ((OnSSIDSavedListener) getActivity()).onRememberSSID(ssid);
-                    }
-
-                    // if this bssid is not already stored
-                    // store it with this ssid
-                    // else, tell the user there is nothing to do
-
-
-
-                } else {
-                    Toast.makeText(getActivity(), "Wifi is not enabled", Toast.LENGTH_SHORT).show();
-                }
+                builder.show();
             }
         });
 
