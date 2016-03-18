@@ -54,6 +54,11 @@ public class MainActivity extends AppCompatActivity implements HierarchyFragment
     @Override
     public void onSSIDClicked(SSID ssid) {
         Log.v(TAG, "Clicked: " + ssid.toString());
+        FragmentManager manager = getFragmentManager();
+        FragmentTransaction ft = manager.beginTransaction();
+        ft.replace(R.id.bottomPane, new DetailSSIDFragment(), null);
+        ft.addToBackStack(null);
+        ft.commit();
     }
 
     @Override
@@ -70,5 +75,14 @@ public class MainActivity extends AppCompatActivity implements HierarchyFragment
     @Override
     public void onSSIDSaved(SSID ssid) {
         hierarchyFragment.ssidAdapter.add(ssid);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() > 0 ){
+            getFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
+        }
     }
 }
