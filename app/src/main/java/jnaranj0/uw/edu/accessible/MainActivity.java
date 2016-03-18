@@ -3,10 +3,14 @@ package jnaranj0.uw.edu.accessible;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 public class MainActivity extends AppCompatActivity implements HierarchyFragment.OnSSIDClickedListener, ActiveConnectionFragment.OnSSIDSavedListener {
@@ -18,11 +22,13 @@ public class MainActivity extends AppCompatActivity implements HierarchyFragment
     ActiveConnectionFragment activeConnectionFragment;
     DetailSSIDFragment detailSSIDFragment;
 
+    WifiManager wifiManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 
         topPane = (FrameLayout) findViewById(R.id.topPane);
         bottomPane = (FrameLayout) findViewById(R.id.bottomPane);
@@ -35,6 +41,23 @@ public class MainActivity extends AppCompatActivity implements HierarchyFragment
         ft.add(R.id.topPane, activeConnectionFragment, null);
         ft.add(R.id.bottomPane, hierarchyFragment, null);
         ft.commit();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.settings_menu, menu);
+        MenuItem settingsItem = menu.findItem(R.id.reconnect_wifi_option);
+        settingsItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Log.v(TAG, "reconnecting wifi!");
+                wifiManager.reassociate();
+                // Return true to consume this click and prevent others from executing.
+                return true;
+            }
+        });
+        return true;
     }
 
     /*
