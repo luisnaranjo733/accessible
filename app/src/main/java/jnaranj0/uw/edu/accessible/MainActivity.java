@@ -3,26 +3,11 @@ package jnaranj0.uw.edu.accessible;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.net.wifi.ScanResult;
-import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity implements HierarchyFragment.OnSSIDClickedListener, ActiveConnectionFragment.OnSSIDSavedListener {
     public static final String TAG = "**accessible";
@@ -31,6 +16,7 @@ public class MainActivity extends AppCompatActivity implements HierarchyFragment
     FrameLayout bottomPane;
     HierarchyFragment hierarchyFragment;
     ActiveConnectionFragment activeConnectionFragment;
+    DetailSSIDFragment detailSSIDFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,36 +37,57 @@ public class MainActivity extends AppCompatActivity implements HierarchyFragment
         ft.commit();
     }
 
+    /*
+    Called when a user clicks on an SSID's listview element.
+    Triggers a fragment transaction which leads to the detail fragment
+     */
     @Override
     public void onSSIDClicked(SSID ssid) {
         Log.v(TAG, "Clicked: " + ssid.toString());
 
-        DetailSSIDFragment detailFragment = new DetailSSIDFragment();
+        detailSSIDFragment = new DetailSSIDFragment();
         Bundle bundle = new Bundle();
         bundle.putLong(DetailSSIDFragment.BUNDLE_ARG_SSID_PK, ssid.getId());
-                detailFragment.setArguments(bundle);
+                detailSSIDFragment.setArguments(bundle);
 
         FragmentManager manager = getFragmentManager();
         FragmentTransaction ft = manager.beginTransaction();
-        ft.replace(R.id.bottomPane, detailFragment, null);
+        ft.replace(R.id.bottomPane, detailSSIDFragment, null);
         ft.addToBackStack(null);
         ft.commit();
     }
 
+    /*
+    Called when the user long presses on an SSID's listview item.
+    Results in the ssid and all related bssids from being deleted
+    from the database and from the array adapters
+     */
     @Override
     public void onSSIDLongPressed(SSID ssid) {
         Log.v(TAG, "Long pressed: " + ssid.toString());
         hierarchyFragment.ssidAdapter.remove(ssid);
         for (BSSID bssid : ssid.getBSSIDs()) {
             bssid.delete();
+            detailSSIDFragment.bssidAdapter.remove(bssid);
         }
         ssid.delete();
 
     }
 
+    /*
+    Called when a new BSSID and SSID are stored
+    Results in the appropriate array adapters being updated
+     */
     @Override
-    public void onSSIDSaved(SSID ssid) {
+    public void onRememberSSID(SSID ssid) {
         hierarchyFragment.ssidAdapter.add(ssid);
+    }
+
+    @Override
+    public void onRememberBSSID(BSSID bssid) {
+        if (detailSSIDFragment.bssidAdapter != null) {
+            detailSSIDFragment.bssidAdapter.add(bssid);
+        }
     }
 
     @Override

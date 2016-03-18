@@ -6,7 +6,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15dp"
+        android:textSize="25dp"
         android:textStyle="bold"
         android:text="BSSID: "/>
 
@@ -15,20 +15,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
-        android:textSize="15dp"/>
+        android:textSize="25dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=" ("
-        android:textSize="15dp"/>
+        android:textSize="25dp"/>
 
 
     <TextView
         android:id="@+id/textViewBSSIDNickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15dp"
+        android:textSize="25dp"
         android:text=""
         />
 
@@ -36,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=")"
-        android:textSize="15dp"/>
+        android:textSize="25dp"/>
 
 
 

@@ -7,6 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -36,6 +39,10 @@ public class DetailSSIDFragment extends Fragment {
         List<SSID> results = SSID.find(SSID.class, "" + pk);
         if (results.size() > 0) {
             SSID ssid = results.get(0);
+
+            TextView title = (TextView) rootView.findViewById(R.id.textViewSSIDDetailName);
+            title.setText(ssid.ssid);
+
             List<BSSID> bssidList = ssid.getBSSIDs();
 
             if (bssidAdapter == null) {

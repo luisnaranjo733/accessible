@@ -40,7 +40,8 @@ public class ActiveConnectionFragment extends Fragment {
     private Runnable runnable;
 
     public interface OnSSIDSavedListener {
-        public void onSSIDSaved(SSID ssid);
+        public void onRememberSSID(SSID ssid);
+        public void onRememberBSSID(BSSID bssid);
     }
 
 
@@ -101,13 +102,14 @@ public class ActiveConnectionFragment extends Fragment {
                     if (bssidResults.size() == 0) {
                         BSSID bssid = new BSSID("nickname", bssidString, ssid);
                         bssid.save();
+                        ((OnSSIDSavedListener) getActivity()).onRememberBSSID(bssid);
                         Toast.makeText(getActivity(), "Saved bssid: " + bssidString, Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getActivity(), "Nothing to do!", Toast.LENGTH_SHORT).show();
                     }
 
                     if (ssidCreated) {
-                        ((OnSSIDSavedListener) getActivity()).onSSIDSaved(ssid);
+                        ((OnSSIDSavedListener) getActivity()).onRememberSSID(ssid);
                     }
 
                     // if this bssid is not already stored
