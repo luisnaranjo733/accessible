@@ -2,6 +2,8 @@ package jnaranj0.uw.edu.accessible;
 
 import com.orm.SugarRecord;
 
+import java.util.List;
+
 /**
  * Created by luisn on 3/17/2016.
  */

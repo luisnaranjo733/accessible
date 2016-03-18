@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +28,8 @@ import java.util.TimerTask;
 public class ActiveConnectionFragment extends Fragment {
 
     public static final String TAG = "**activeConnFrag";
+    public static final int UI_UPDATE_PERIOD = 100;
+    private OnSSIDSavedListener callback;
 
     private TextView currentNetworkState;
     private TextView currentSSID;
@@ -39,10 +42,25 @@ public class ActiveConnectionFragment extends Fragment {
     private Handler handler;
     private Runnable runnable;
 
+    public interface OnSSIDSavedListener {
+        public void onSSIDSaved(SSID ssid);
+    }
+
+
     public ActiveConnectionFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onAttach(Context context){
+        super.onAttach(context);
+
+        try {
+            callback = (OnSSIDSavedListener) context;
+        }catch(ClassCastException e){
+            throw new ClassCastException(context.toString() + " must implement OnSSIDSavedListener");
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,13 +79,58 @@ public class ActiveConnectionFragment extends Fragment {
             wifiManager = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
         }
 
+        rememberWAPButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (wifiManager.getWifiState() == WifiManager.WIFI_STATE_ENABLED) {
+                    WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+                    String ssidString = wifiInfo.getSSID();
+                    ssidString = ssidString.replaceAll("\"", "");
+                    String bssidString = wifiInfo.getBSSID();
+
+                    List<SSID> ssidResults = SSID.find(SSID.class, "ssid = ?", ssidString);
+                    boolean ssidCreated = false;
+                    if (ssidResults.size() == 0) {
+                        SSID ssid = new SSID(ssidString);
+                        ssid.save();
+                        ssidResults.add(ssid);
+                        ssidCreated = true;
+                    }
+                    SSID ssid = ssidResults.get(0);
+
+                    // and with our ssid?
+                    List<BSSID> bssidResults = BSSID.find(BSSID.class, "bssid = ?", bssidString);
+
+                    if (bssidResults.size() == 0) {
+                        BSSID bssid = new BSSID("nickname", bssidString, ssid);
+                        bssid.save();
+                        Toast.makeText(getActivity(), "Saved bssid: " + bssidString, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getActivity(), "Nothing to do!", Toast.LENGTH_SHORT).show();
+                    }
+
+                    if (ssidCreated) {
+                        ((OnSSIDSavedListener) getActivity()).onSSIDSaved(ssid);
+                    }
+
+                    // if this bssid is not already stored
+                    // store it with this ssid
+                    // else, tell the user there is nothing to do
+
+
+
+                } else {
+                    Toast.makeText(getActivity(), "Wifi is not enabled", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         runnable = new Runnable() {
             @Override
             public void run() {
-                Log.v(TAG, "Updating");
                 updateUI();
                 if (!activityStopped) {
-                    handler.postDelayed(this, 100);
+                    handler.postDelayed(this, UI_UPDATE_PERIOD);
                 }
 
             }

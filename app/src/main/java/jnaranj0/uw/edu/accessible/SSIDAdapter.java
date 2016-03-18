@@ -26,7 +26,9 @@ public class SSIDAdapter extends ArrayAdapter<SSID> {
         }
         // Lookup view for data population
         TextView textViewSSIDName = (TextView) convertView.findViewById(R.id.textViewSSIDName);
-        textViewSSIDName.setText(ssid.toString());
+        TextView textViewSSIDWapCount = (TextView) convertView.findViewById(R.id.textViewSSIDWapCount);
+        textViewSSIDName.setText(ssid.ssid);
+        textViewSSIDWapCount.setText("" + ssid.getNodes());
         // Return the completed view to render on screen
         return convertView;
     }

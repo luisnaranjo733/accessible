@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends AppCompatActivity implements HierarchyFragment.OnSSIDClickedListener {
+public class MainActivity extends AppCompatActivity implements HierarchyFragment.OnSSIDClickedListener, ActiveConnectionFragment.OnSSIDSavedListener {
     public static final String TAG = "**accessible";
 
     FrameLayout topPane;
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements HierarchyFragment
         FragmentManager manager = getFragmentManager();
         FragmentTransaction ft = manager.beginTransaction();
         ft.add(R.id.topPane, activeConnectionFragment, null);
-        ft.add(R.id.bottomPane, hierarchyFragment , null);
+        ft.add(R.id.bottomPane, hierarchyFragment, null);
         ft.commit();
     }
 
@@ -60,6 +60,15 @@ public class MainActivity extends AppCompatActivity implements HierarchyFragment
     public void onSSIDLongPressed(SSID ssid) {
         Log.v(TAG, "Long pressed: " + ssid.toString());
         hierarchyFragment.ssidAdapter.remove(ssid);
+        for (BSSID bssid : ssid.getBSSIDs()) {
+            bssid.delete();
+        }
         ssid.delete();
+
+    }
+
+    @Override
+    public void onSSIDSaved(SSID ssid) {
+        hierarchyFragment.ssidAdapter.add(ssid);
     }
 }

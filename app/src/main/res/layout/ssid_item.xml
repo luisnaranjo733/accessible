@@ -16,7 +16,20 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:textSize="30dp"
-        android:text="(6 WAPs)"/>
+        android:text="("/>
+
+    <TextView
+        android:id="@+id/textViewSSIDWapCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:text="69"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:text=" WAPs)"/>
 
 
 </LinearLayout>
