@@ -37,6 +37,7 @@ public class ActiveConnectionFragment extends Fragment {
     private TextView currentSSID;
     private TextView currentBSSID;
     private TextView currentRssi;
+    private TextView currentBand;
     private Button rememberWAPButton;
 
     private WifiManager wifiManager;
@@ -76,6 +77,7 @@ public class ActiveConnectionFragment extends Fragment {
             currentSSID = (TextView) rootView.findViewById(R.id.textViewCurrentSSIDName);
             currentBSSID = (TextView) rootView.findViewById(R.id.textViewCurrentBSSID);
             currentRssi = (TextView) rootView.findViewById(R.id.textViewCurrentRssi);
+            currentBand = (TextView) rootView.findViewById(R.id.textViewCurrentBand);
             rememberWAPButton = (Button) rootView.findViewById(R.id.rememberWAPButton);
 
         }
@@ -216,6 +218,7 @@ public class ActiveConnectionFragment extends Fragment {
                 }
                 String signalStrength = "" + wifiInfo.getRssi();
                 currentRssi.setText("" + signalStrength);
+                currentBand.setText("" + wifiInfo.getFrequency());
             } else {
                 Log.v(TAG, "BSSID IS NULL :(");
                 Toast.makeText(getActivity(), "Please try again", Toast.LENGTH_SHORT).show();
