@@ -4,6 +4,7 @@ package jnaranj0.uw.edu.accessible;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Paint;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -29,7 +30,7 @@ import java.util.List;
 public class ActiveConnectionFragment extends Fragment {
 
     public static final String TAG = "**activeConnFrag";
-    public static final int UI_UPDATE_PERIOD = 100;
+    public static final int UI_UPDATE_PERIOD = 500;
     private OnSSIDSavedListener callback;
 
     private TextView currentNetworkState;
@@ -200,15 +201,32 @@ public class ActiveConnectionFragment extends Fragment {
             WifiInfo wifiInfo = wifiManager.getConnectionInfo();
 
             currentSSID.setText(wifiInfo.getSSID());
-            currentBSSID.setText(wifiInfo.getBSSID());
-            String signalStrength = "" + wifiInfo.getRssi();
-            currentRssi.setText("" + signalStrength);
+            String bssidRepr = wifiInfo.getBSSID();
+            if (bssidRepr != null && !bssidRepr.equals("")) {
+                List<BSSID> results = BSSID.find(BSSID.class, "bssid = ?" , bssidRepr);
+                if (results.size() > 0) {
+                    BSSID bssid = results.get(0);
+                    currentBSSID.setText(bssid.nickname);
+                    rememberWAPButton.setPaintFlags(rememberWAPButton.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    rememberWAPButton.setEnabled(false);
+                } else {
+                    currentBSSID.setText(bssidRepr);
+                    rememberWAPButton.setPaintFlags(rememberWAPButton.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
+                    rememberWAPButton.setEnabled(true);
+                }
+                String signalStrength = "" + wifiInfo.getRssi();
+                currentRssi.setText("" + signalStrength);
+            } else {
+                Log.v(TAG, "BSSID IS NULL :(");
+                Toast.makeText(getActivity(), "Please try again", Toast.LENGTH_SHORT).show();
+            }
 
         } else {
             Log.v(TAG, "wifi disabled");
             currentSSID.setText("");
             currentBSSID.setText("");
             currentRssi.setText("");
+            rememberWAPButton.setEnabled(false);
         }
     }
 }
