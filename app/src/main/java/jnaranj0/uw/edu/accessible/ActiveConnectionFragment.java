@@ -90,13 +90,14 @@ public class ActiveConnectionFragment extends Fragment {
             public void onClick(View v) {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("Title");
+                builder.setTitle("Remember this connection");
 
 // Set up the input
                 final EditText input = new EditText(getActivity());
 // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
                 input.setInputType(InputType.TYPE_CLASS_TEXT);
                 builder.setView(input);
+                builder.setMessage("Store this BSSID in relation to the current SSID");
 
 // Set up the buttons
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -233,15 +234,3 @@ public class ActiveConnectionFragment extends Fragment {
         }
     }
 }
-
-/*
-        HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("44:d9:e7:02:33:92", "AP_luis_room_?");
-        hashMap.put("44:d9:e7:03:33:92", "AP_luis_room_n");
-        hashMap.put("46:d9:e7:04:33:92", "AP_luis_room_ac");
-        hashMap.put("44:d9:e7:f6:02:e2", "AP_nakagawa_room_?");
-        hashMap.put("44:d9:e7:f9:6d:ce", "AP_joes_room_?");
-        hashMap.put("44:d9:e7:f9:7e:39", "AP_dions_room_?");
-        hashMap.put("44:d9:e7:f9:79:3c", "AP_andys_room_?");
-        hashMap.put("44:d9:e7:f9:7a:0b", "AP_red_room_?");
- */
