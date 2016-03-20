@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DetailSSIDFragment extends Fragment implements ConfirmDeleteDialogFragment.OnConfirmDeleteListener {
+public class DetailSSIDFragment extends Fragment implements ConfirmDeleteDialogFragment.OnConfirmDeleteListener, EditNicknameDialog.OnChangeNicknameListener {
     public static final String TAG = "**DetailFrag";
     public static final String BUNDLE_ARG_SSID_PK = "SSID_PK";
     public static final int DIALOG_FRAGMENT = 1;
@@ -54,6 +54,13 @@ public class DetailSSIDFragment extends Fragment implements ConfirmDeleteDialogF
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     BSSID bssid = (BSSID) parent.getItemAtPosition(position);
                     // open edit nickname dialog
+                    EditNicknameDialog editNicknameDialog = new EditNicknameDialog();
+                    Bundle bundle = new Bundle();
+                    bundle.putLong(EditNicknameDialog.BUNDLE_BSSID_PK, bssid.getId());
+                    editNicknameDialog.setArguments(bundle);
+                    editNicknameDialog.setTargetFragment(DetailSSIDFragment.this,
+                            EditNicknameDialog.DIALOG_FRAGMENT);
+                    editNicknameDialog.show(getFragmentManager(), null);
                 }
             });
             listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -92,4 +99,11 @@ public class DetailSSIDFragment extends Fragment implements ConfirmDeleteDialogF
     }
 
 
+    @Override
+    public void onChangeNickname(BSSID bssid, String nickname) {
+        bssid.nickname = nickname;
+        bssid.save();
+        bssidAdapter.notifyDataSetInvalidated();
+        bssidAdapter.notifyDataSetChanged();
+    }
 }
