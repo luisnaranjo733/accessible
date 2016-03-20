@@ -64,10 +64,11 @@ public class DetailSSIDFragment extends Fragment implements ConfirmDeleteDialogF
                     DialogFragment confirmDeleteFragment = new ConfirmDeleteDialogFragment();
 
                     Bundle bundle = new Bundle();
-                    bundle.putLong(BUNDLE_ARG_SSID_PK, bssid.getId());
+                    bundle.putLong(ConfirmDeleteDialogFragment.BUNDLE_BSSID_PK, bssid.getId());
 
                     confirmDeleteFragment.setArguments(bundle);
-                    confirmDeleteFragment.setTargetFragment(DetailSSIDFragment.this, DIALOG_FRAGMENT);
+                    confirmDeleteFragment.setTargetFragment(DetailSSIDFragment.this,
+                            ConfirmDeleteDialogFragment.DIALOG_FRAGMENT);
                     confirmDeleteFragment.show(getFragmentManager(), null);
                     return true;
                 }

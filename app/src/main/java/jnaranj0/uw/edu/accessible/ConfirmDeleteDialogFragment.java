@@ -12,8 +12,13 @@ import java.util.List;
 
 public class ConfirmDeleteDialogFragment extends DialogFragment {
     public static final String BUNDLE_BSSID_PK = "BUNDLE_BSSID_PK";
+    public static final String BUNDLE_SSID_PK = "BUNDLE_SSID_PK";
+    public static final int DIALOG_FRAGMENT = 1;
+
     OnConfirmDeleteListener mListener;
+
     BSSID bssid;
+    SSID ssid;
 
     public interface OnConfirmDeleteListener{
         void onConfirmDelete(ConfirmDeleteDialogFragment dialog);
@@ -41,16 +46,38 @@ public class ConfirmDeleteDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         Bundle bundle = getArguments();
-        long pk = bundle.getLong(DetailSSIDFragment.BUNDLE_ARG_SSID_PK);
-        List<BSSID> results = BSSID.find(BSSID.class, "id = ?", "" + pk);
-        if (results.size() > 0) {
-            bssid = results.get(0);
-            Log.v("**A", "Delete " + bssid.bssid);
+        long bssidPk = bundle.getLong(BUNDLE_BSSID_PK, 0);
+        long ssidPk = bundle.getLong(BUNDLE_SSID_PK, 0);
+
+        String message = "";
+        // if we are confirming whether or not to delete a bssid
+        if (bssidPk != 0) {
+            // set the dialog title string
+            message = "Delete BSSID?";
+            // find the bssid, and set it as a field for the callback to refer to
+            List<BSSID> results = BSSID.find(BSSID.class, "id = ?", "" + bssidPk);
+            if (results.size() > 0) {
+                bssid = results.get(0);
+                Log.v("**A", "Delete " + bssid.bssid);
+            }
+            // if we are confirming whether or not to delete a ssid
+        } else if (ssidPk != 0) {
+            // set the dialog title string
+            message = "Delete SSID?";
+            // find the ssid, and set it as a field for the callback to refer to
+            List<SSID> results = SSID.find(SSID.class, "id = ?", "" + ssidPk);
+            if (results.size() > 0) {
+                ssid = results.get(0);
+                Log.v("**A", "Delete " + ssid.ssid);
+            }
+
         }
+
+
 
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("Delete BSSID?")
+        builder.setMessage(message)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         mListener.onConfirmDelete(ConfirmDeleteDialogFragment.this);

@@ -101,13 +101,16 @@ public class MainActivity extends AppCompatActivity implements HierarchyFragment
     @Override
     public void onSSIDLongPressed(SSID ssid) {
         Log.v(TAG, "Long pressed: " + ssid.toString());
-        hierarchyFragment.ssidAdapter.remove(ssid);
+
         for (BSSID bssid : ssid.getBSSIDs()) {
-            bssid.delete();
             if (detailSSIDFragment != null && detailSSIDFragment.bssidAdapter != null) {
                 detailSSIDFragment.bssidAdapter.remove(bssid);
             }
+            bssid.delete();
         }
+        hierarchyFragment.ssids.remove(ssid);
+        //hierarchyFragment.ssidAdapter.remove(ssid);
+        hierarchyFragment.ssidAdapter.notifyDataSetChanged();
         ssid.delete();
 
     }

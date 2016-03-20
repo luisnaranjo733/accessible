@@ -4,9 +4,6 @@ import com.orm.SugarRecord;
 
 import java.util.List;
 
-/**
- * Created by luisn on 3/17/2016.
- */
 public class SSID extends SugarRecord {
     String ssid;
     //Location
@@ -21,6 +18,16 @@ public class SSID extends SugarRecord {
 
     public String toString() {
         return ssid + this.getId();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof SSID) {
+            SSID other = (SSID) o;
+            return other.ssid.equals(this.ssid) && other.getId().equals(this.getId());
+        } else {
+            return false;
+        }
     }
 
     // Get all BSSIDs from this SSID

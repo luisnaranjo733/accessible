@@ -1,6 +1,7 @@
 package jnaranj0.uw.edu.accessible;
 
 
+import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -19,10 +20,11 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HierarchyFragment extends Fragment {
+public class HierarchyFragment extends Fragment implements ConfirmDeleteDialogFragment.OnConfirmDeleteListener {
     public static final String TAG = "**HierarchyFrag";
 
     public SSIDAdapter ssidAdapter;
+    public List<SSID> ssids;
     private OnSSIDClickedListener callback;
 
     public interface OnSSIDClickedListener {
@@ -52,8 +54,7 @@ public class HierarchyFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_hierarchy, container, false);
 
         // create array adapter for ssids
-        List<SSID> ssids = SSID.listAll(SSID.class);
-
+        ssids = SSID.listAll(SSID.class);
 
         ssidAdapter = new SSIDAdapter(getActivity(), ssids);
 
@@ -73,13 +74,34 @@ public class HierarchyFragment extends Fragment {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 SSID ssid = (SSID) parent.getItemAtPosition(position);
-                ((OnSSIDClickedListener) getActivity()).onSSIDLongPressed(ssid);
+                Log.v(TAG, "" + ssid.getId() + "Clicked on " + ssid.ssid);
+                DialogFragment confirmDeleteFragment = new ConfirmDeleteDialogFragment();
+
+                Bundle bundle = new Bundle();
+                bundle.putLong(ConfirmDeleteDialogFragment.BUNDLE_SSID_PK, ssid.getId());
+
+                confirmDeleteFragment.setArguments(bundle);
+                confirmDeleteFragment.setTargetFragment(HierarchyFragment.this,
+                        ConfirmDeleteDialogFragment.DIALOG_FRAGMENT);
+                confirmDeleteFragment.show(getFragmentManager(), null);
+
                 return true;
             }
         });
 
         // Inflate the layout for this fragment
         return rootView;
+    }
+
+    @Override
+    public void onConfirmDelete(ConfirmDeleteDialogFragment dialog) {
+        Log.v(TAG, "On confirm delete: " + dialog.ssid.ssid);
+        ((OnSSIDClickedListener) getActivity()).onSSIDLongPressed(dialog.ssid);
+    }
+
+    @Override
+    public void onCancelDelete(ConfirmDeleteDialogFragment dialog) {
+
     }
 
 }
