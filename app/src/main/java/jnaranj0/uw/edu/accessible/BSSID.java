@@ -4,9 +4,6 @@ import com.orm.SugarRecord;
 
 import java.util.List;
 
-/**
- * Created by luisn on 3/17/2016.
- */
 public class BSSID extends SugarRecord {
     String nickname;
     String bssid;
@@ -20,5 +17,15 @@ public class BSSID extends SugarRecord {
         this.nickname = nickname;
         this.bssid = bssid;
         this.ssid = ssid;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof BSSID) {
+            BSSID other = (BSSID) o;
+            return other.bssid.equals(this.bssid);
+        } else {
+            return false;
+        }
     }
 }

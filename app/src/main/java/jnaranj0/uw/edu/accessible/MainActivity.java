@@ -36,11 +36,26 @@ public class MainActivity extends AppCompatActivity implements HierarchyFragment
         hierarchyFragment = new HierarchyFragment();
         activeConnectionFragment = new ActiveConnectionFragment();
 
+
         FragmentManager manager = getFragmentManager();
+        if (manager.findFragmentById(R.id.bottomPane) != null) {
+            // this happened once
+            Log.e(TAG, "FREAKING !Empty!!!!");
+        }
         FragmentTransaction ft = manager.beginTransaction();
-        ft.add(R.id.topPane, activeConnectionFragment, null);
-        ft.add(R.id.bottomPane, hierarchyFragment, null);
-        ft.commit();
+
+        if (!ft.isEmpty()) {
+            Log.e(TAG, "!EMPTY!!!!!!!");
+        }
+
+        if (savedInstanceState == null) {
+            ft.add(R.id.topPane, activeConnectionFragment, null);
+            ft.add(R.id.bottomPane, hierarchyFragment, null);
+            ft.commit();
+        } else {
+            // this happened once
+            Log.v(TAG, "RECREATED ACTIVITY");
+        }
     }
 
     @Override
