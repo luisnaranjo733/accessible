@@ -124,7 +124,8 @@ public class ActiveConnectionFragment extends Fragment {
                             List<BSSID> bssidResults = BSSID.find(BSSID.class, "bssid = ?", bssidString);
 
                             if (bssidResults.size() == 0) {
-                                BSSID bssid = new BSSID(nickname, bssidString, ssid);
+                                BSSID bssid = new BSSID(nickname, bssidString,
+                                        wifiInfo.getFrequency(), ssid);
                                 bssid.save();
                                 ((OnSSIDSavedListener) getActivity()).onRememberBSSID(bssid);
                                 Toast.makeText(getActivity(), R.string.alert_remember_wap_toast_bssid_not_exists + bssidString, Toast.LENGTH_SHORT).show();

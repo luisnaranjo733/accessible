@@ -34,8 +34,8 @@ public class BSSIDAdapter extends ArrayAdapter<BSSID> {
 
         textViewBSSID.setText(bssid.bssid);
         textViewBSSIDNickname.setText(bssid.nickname);
-        textViewBSSIDBand.setText("5 ghz");
-        textViewBSSIDChannel.setText("36");
+        textViewBSSIDBand.setText(bssid.getBand());
+        textViewBSSIDChannel.setText("" + bssid.getChannel());
 
         // Return the completed view to render on screen
         return convertView;
