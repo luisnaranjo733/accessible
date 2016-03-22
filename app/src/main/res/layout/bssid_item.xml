@@ -1,43 +1,56 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="15dp">
 
     <TextView
+        android:id="@+id/bssidItemBand"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15dp"
-        android:textStyle="bold"
-        android:text="BSSID: "/>
+        android:layout_marginRight="10dp"
+        android:textSize="25dp"
+        android:text="2.4 ghz"/>
 
-    <TextView
-        android:id="@+id/textViewBSSIDName"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:textSize="15dp"/>
+        android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=" ("
-        android:textSize="15dp"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ItemBSSIDBold"
+                android:text="BSSID: "/>
 
-    <TextView
-        android:id="@+id/textViewBSSIDNickname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="15dp"
-        android:text=""
-        />
+            <TextView
+                android:id="@+id/textViewBSSIDName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=")"
-        android:textSize="15dp"/>
+        </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/ItemBSSIDBold"
+                android:text="Channel: "/>
 
+            <TextView
+                android:id="@+id/textViewBSSIDChannel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

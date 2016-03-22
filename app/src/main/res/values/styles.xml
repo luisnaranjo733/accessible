@@ -17,4 +17,9 @@
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Headline</item>
     </style>
 
+    <style name="ItemBSSIDBold" parent="AppTheme">
+        <item name="android:textSize">15dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>

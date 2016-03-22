@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 public class BSSIDAdapter extends ArrayAdapter<BSSID> {
@@ -26,9 +28,18 @@ public class BSSIDAdapter extends ArrayAdapter<BSSID> {
         }
 
         TextView textViewBSSID = (TextView) convertView.findViewById(R.id.textViewBSSIDName);
-        TextView textViewBSSIDNickname = (TextView) convertView.findViewById(R.id.textViewBSSIDNickname);
-        textViewBSSID.setText(bssid.bssid);
-        textViewBSSIDNickname.setText(bssid.nickname);
+        TextView textViewBSSIDBand = (TextView) convertView.findViewById(R.id.bssidItemBand);
+        TextView textViewBSSIDChannel = (TextView) convertView.findViewById(R.id.textViewBSSIDChannel);
+
+        if (bssid.nickname == null || bssid.nickname.equals("")) {
+            textViewBSSID.setText(bssid.bssid);
+        } else {
+            textViewBSSID.setText(bssid.nickname);
+        }
+
+        textViewBSSIDBand.setText("5 ghz");
+        textViewBSSIDChannel.setText("36");
+
         // Return the completed view to render on screen
         return convertView;
     }
