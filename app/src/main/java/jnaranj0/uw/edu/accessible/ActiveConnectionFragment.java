@@ -90,17 +90,17 @@ public class ActiveConnectionFragment extends Fragment {
             public void onClick(View v) {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("Remember this connection");
+                builder.setTitle(R.string.alert_remember_wap_title);
 
 // Set up the input
                 final EditText input = new EditText(getActivity());
 // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
                 input.setInputType(InputType.TYPE_CLASS_TEXT);
                 builder.setView(input);
-                builder.setMessage("Store this BSSID in relation to the current SSID");
+                builder.setMessage(R.string.alert_remember_wap_message);
 
 // Set up the buttons
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(R.string.alert_positive_button, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String nickname = input.getText().toString();
@@ -127,9 +127,9 @@ public class ActiveConnectionFragment extends Fragment {
                                 BSSID bssid = new BSSID(nickname, bssidString, ssid);
                                 bssid.save();
                                 ((OnSSIDSavedListener) getActivity()).onRememberBSSID(bssid);
-                                Toast.makeText(getActivity(), "Saved bssid: " + bssidString, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), R.string.alert_remember_wap_toast_bssid_not_exists + bssidString, Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(getActivity(), "Nothing to do!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), R.string.alert_remember_wap_toast_bssid_exists, Toast.LENGTH_SHORT).show();
                             }
 
                             if (ssidCreated) {
@@ -139,11 +139,11 @@ public class ActiveConnectionFragment extends Fragment {
                             ((OnSSIDSavedListener) getActivity()).onSwitchToDetail(ssid);
 
                         } else {
-                            Toast.makeText(getActivity(), "Wifi is not enabled", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), R.string.alert_remember_wap_toast_wifi_disabled, Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton(R.string.alert_negative_button, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
@@ -222,7 +222,7 @@ public class ActiveConnectionFragment extends Fragment {
                 currentBand.setText("" + wifiInfo.getFrequency());
             } else {
                 Log.v(TAG, "BSSID IS NULL :(");
-                Toast.makeText(getActivity(), "Please try again", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.update_ui_bssid_null_toast, Toast.LENGTH_SHORT).show();
             }
 
         } else {

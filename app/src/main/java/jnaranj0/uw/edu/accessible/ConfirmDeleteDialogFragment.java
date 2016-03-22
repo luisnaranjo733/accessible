@@ -53,7 +53,7 @@ public class ConfirmDeleteDialogFragment extends DialogFragment {
         // if we are confirming whether or not to delete a bssid
         if (bssidPk != 0) {
             // set the dialog title string
-            message = "Delete BSSID?";
+            message = getActivity().getString(R.string.alert_confirm_delete_message_bssid);
             // find the bssid, and set it as a field for the callback to refer to
             List<BSSID> results = BSSID.find(BSSID.class, "id = ?", "" + bssidPk);
             if (results.size() > 0) {
@@ -63,7 +63,7 @@ public class ConfirmDeleteDialogFragment extends DialogFragment {
             // if we are confirming whether or not to delete a ssid
         } else if (ssidPk != 0) {
             // set the dialog title string
-            message = "Delete SSID?";
+            message = getActivity().getString(R.string.alert_confirm_delete_message_ssid);
             // find the ssid, and set it as a field for the callback to refer to
             List<SSID> results = SSID.find(SSID.class, "id = ?", "" + ssidPk);
             if (results.size() > 0) {
@@ -78,12 +78,12 @@ public class ConfirmDeleteDialogFragment extends DialogFragment {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(message)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.alert_positive_button, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         mListener.onConfirmDelete(ConfirmDeleteDialogFragment.this);
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.alert_negative_button, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // User cancelled the dialog
                         mListener.onCancelDelete(ConfirmDeleteDialogFragment.this);

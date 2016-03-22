@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements HierarchyFragment.OnSSIDClickedListener, ActiveConnectionFragment.OnSSIDSavedListener {
     public static final String TAG = "**accessible";
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements HierarchyFragment
         settingsItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                Log.v(TAG, "reconnecting wifi!");
+                Toast.makeText(MainActivity.this, R.string.menu_option_forced_wifi_handoff, Toast.LENGTH_SHORT).show();
                 wifiManager.reassociate();
                 // Return true to consume this click and prevent others from executing.
                 return true;

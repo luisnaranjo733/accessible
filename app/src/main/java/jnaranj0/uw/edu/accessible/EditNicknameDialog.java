@@ -49,17 +49,17 @@ public class EditNicknameDialog extends DialogFragment {
 
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Edit BSSID Nickname");
-        builder.setMessage("BSSID: " + bssid.bssid);
+        builder.setTitle(R.string.alert_edit_nickname_title);
+        builder.setMessage(getActivity().getString(R.string.alert_edit_nickname_message) + bssid.bssid);
 
         builder.setView(editText)
-                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.alert_positive_save_button, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         String nickname = editText.getText().toString();
                         mListener.onChangeNickname(bssid, nickname);
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.alert_negative_button, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // User cancelled the dialog
                     }

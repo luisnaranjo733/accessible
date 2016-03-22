@@ -1,6 +1,29 @@
 <resources>
     <string name="app_name">accessible</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Menu options -->
+    <string name="menu_option_force_wifi_handoff">Force WiFi handoff</string>
+    <string name="menu_option_forced_wifi_handoff">Forced WiFi handoff</string>
+
+    <!-- ActiveConnectionFragment -->
+    <string name="alert_positive_button">OK</string>
+    <string name="alert_negative_button">Canel</string>
+    <string name="alert_positive_save_button">Save</string>
+
+    <string name="alert_remember_wap_title">Remember this connection</string>
+    <string name="alert_remember_wap_message">Store this BSSID in relation to the current SSID</string>
+    <string name="alert_remember_wap_toast_bssid_exists">BSSID already exists</string>
+    <string name="alert_remember_wap_toast_bssid_not_exists">Saved bssid: </string>
+    <string name="alert_remember_wap_toast_wifi_disabled">Wifi is not enabled</string>
+
+    <string name="update_ui_bssid_null_toast">BSSID is null</string>
+
+    <!-- ConfirmDeleteDialogFragment -->
+    <string name="alert_confirm_delete_message_ssid">Delete SSID?</string>
+    <string name="alert_confirm_delete_message_bssid">Delete BSSID?</string>
+
+    <!-- EditNickname Dialog -->
+    <string name="alert_edit_nickname_title">Edit BSSID Nickname</string>
+    <string name="alert_edit_nickname_message">BSSID: </string>
+
 </resources>
