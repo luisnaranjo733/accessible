@@ -1,9 +1,15 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="jnaranj0.uw.edu.accessible.HierarchyFragment">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/FragmentTitle"
+        android:text="Saved SSIDs"/>
 
     <ListView
         android:id="@+id/listViewSSID"
@@ -12,4 +18,4 @@
         >
 
     </ListView>
-</FrameLayout>
+</LinearLayout>
