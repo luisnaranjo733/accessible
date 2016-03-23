@@ -95,7 +95,6 @@ public class HierarchyFragment extends Fragment implements ConfirmDeleteDialogFr
 
     @Override
     public void onConfirmDelete(ConfirmDeleteDialogFragment dialog) {
-        Log.v(TAG, "On confirm delete: " + dialog.ssid.ssid);
         ((OnSSIDClickedListener) getActivity()).onSSIDLongPressed(dialog.ssid);
     }
 

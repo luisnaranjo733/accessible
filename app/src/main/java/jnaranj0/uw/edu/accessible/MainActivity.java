@@ -82,19 +82,6 @@ public class MainActivity extends AppCompatActivity implements HierarchyFragment
      */
     @Override
     public void onSSIDClicked(SSID ssid) {
-        /*
-        Case A: detailSSIDFragment is null
-                * Create it, show it
-        Case B: detailSSIDFragment is not null
-                * If visible
-                *   If current SSID
-                *       Do nothing
-                *   If not current SSID
-                *       Go to Case A
-                * If not visible
-                *    Case A
-         */
-
         if (detailSSIDFragment != null &&
                 detailSSIDFragment.isVisible() && detailSSIDFragment.ssid.equals(ssid)) {
             return;
@@ -127,9 +114,11 @@ public class MainActivity extends AppCompatActivity implements HierarchyFragment
             }
             bssid.delete();
         }
+
         hierarchyFragment.ssids.remove(ssid);
-        //hierarchyFragment.ssidAdapter.remove(ssid);
         hierarchyFragment.ssidAdapter.notifyDataSetChanged();
+
+
         ssid.delete();
 
     }
