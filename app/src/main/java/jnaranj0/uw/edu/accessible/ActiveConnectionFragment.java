@@ -112,6 +112,11 @@ public class ActiveConnectionFragment extends Fragment {
                             ssidString = ssidString.replaceAll("\"", "");
                             String bssidString = wifiInfo.getBSSID();
 
+                            if (bssidString == null || bssidString.equals("")) {
+                                Toast.makeText(getActivity(), "Please wait for wifi to be active",
+                                        Toast.LENGTH_LONG).show();
+                            }
+
                             List<SSID> ssidResults = SSID.find(SSID.class, "ssid = ?", ssidString);
                             boolean ssidCreated = false;
                             if (ssidResults.size() == 0) {
