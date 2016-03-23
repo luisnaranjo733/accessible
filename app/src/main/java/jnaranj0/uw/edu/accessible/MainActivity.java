@@ -14,7 +14,7 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity implements HierarchyFragment.OnSSIDClickedListener, ActiveConnectionFragment.OnSSIDSavedListener {
+public class MainActivity extends AppCompatActivity implements HierarchyFragment.OnSSIDClickedListener, ActiveConnectionFragment.OnSSIDSavedListener, DetailSSIDFragment.DetailSSIDListener {
     public static final String TAG = "**accessible";
 
     FrameLayout topPane;
@@ -151,5 +151,19 @@ public class MainActivity extends AppCompatActivity implements HierarchyFragment
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public void onBSSIDAdapterEmpty() {
+
+        if (hierarchyFragment == null) {
+            hierarchyFragment = new HierarchyFragment();
+        }
+
+        FragmentManager manager = getFragmentManager();
+        FragmentTransaction ft = manager.beginTransaction();
+        ft.replace(R.id.bottomPane, hierarchyFragment, HierarchyFragment.TAG);
+        //ft.addToBackStack(null);
+        ft.commit();
     }
 }

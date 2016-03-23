@@ -1,6 +1,7 @@
 package jnaranj0.uw.edu.accessible;
 
 import android.app.DialogFragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -26,6 +28,23 @@ public class DetailSSIDFragment extends Fragment implements ConfirmDeleteDialogF
     public BSSIDAdapter bssidAdapter;
     public SSID ssid;
 
+    private DetailSSIDListener callback;
+
+    public interface DetailSSIDListener {
+        void onBSSIDAdapterEmpty();
+    }
+
+
+    @Override
+    public void onAttach(Context context){
+        super.onAttach(context);
+
+        try {
+            callback = (DetailSSIDListener) context;
+        }catch(ClassCastException e){
+            throw new ClassCastException(context.toString() + " must implement DetailSSIDListener");
+        }
+    }
     public DetailSSIDFragment() {
         // Required empty public constructor
     }
@@ -92,8 +111,12 @@ public class DetailSSIDFragment extends Fragment implements ConfirmDeleteDialogF
     @Override
     public void onConfirmDelete(ConfirmDeleteDialogFragment dialog) {
         bssidAdapter.remove(dialog.bssid);
+        if (bssidAdapter.isEmpty()) {
+            //callback.onBSSIDAdapterEmpty();
+            dialog.bssid.ssid.delete();
+            ((DetailSSIDListener) getActivity()).onBSSIDAdapterEmpty();
+        }
         dialog.bssid.delete();
-        Log.v(TAG, "DELETED " + dialog.bssid.bssid);
     }
 
     @Override
