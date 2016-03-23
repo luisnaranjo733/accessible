@@ -102,18 +102,14 @@ public class MainActivity extends AppCompatActivity implements HierarchyFragment
         Log.v(TAG, "Long pressed: " + ssid.toString());
 
         for (BSSID bssid : ssid.getBSSIDs()) {
-            if (detailSSIDFragment != null && detailSSIDFragment.bssidAdapter != null) {
-                detailSSIDFragment.bssidAdapter.remove(bssid);
-            }
+            detailSSIDFragment.bssidAdapter.remove(bssid);
             bssid.delete();
         }
 
         hierarchyFragment.ssids.remove(ssid);
         hierarchyFragment.ssidAdapter.notifyDataSetChanged();
 
-
         ssid.delete();
-
     }
 
     /*
