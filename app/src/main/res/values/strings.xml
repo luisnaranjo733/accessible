@@ -13,7 +13,7 @@
     <string name="alert_remember_wap_title">Remember this connection</string>
     <string name="alert_remember_wap_message">Store this BSSID in relation to the current SSID</string>
     <string name="alert_remember_wap_toast_bssid_exists">BSSID already exists</string>
-    <string name="alert_remember_wap_toast_bssid_not_exists">Saved bssid: </string>
+    <string name="alert_remember_wap_toast_bssid_not_exists">Saved bssid</string>
     <string name="alert_remember_wap_toast_wifi_disabled">Wifi is not enabled</string>
 
     <string name="update_ui_bssid_null_toast">BSSID is null</string>

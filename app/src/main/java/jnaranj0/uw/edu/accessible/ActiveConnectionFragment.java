@@ -130,9 +130,7 @@ public class ActiveConnectionFragment extends Fragment {
                                         wifiInfo.getFrequency(), ssid);
                                 bssid.save();
                                 ((OnSSIDSavedListener) getActivity()).onRememberBSSID(bssid);
-                                Toast.makeText(getActivity(), R.string.alert_remember_wap_toast_bssid_not_exists + bssidString, Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(getActivity(), R.string.alert_remember_wap_toast_bssid_exists, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), R.string.alert_remember_wap_toast_bssid_not_exists, Toast.LENGTH_SHORT).show();
                             }
 
                             if (ssidCreated) {
@@ -141,8 +139,6 @@ public class ActiveConnectionFragment extends Fragment {
 
                             ((OnSSIDSavedListener) getActivity()).onSwitchToDetail(ssid);
 
-                        } else {
-                            Toast.makeText(getActivity(), R.string.alert_remember_wap_toast_wifi_disabled, Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -223,9 +219,6 @@ public class ActiveConnectionFragment extends Fragment {
                 String signalStrength = "" + wifiInfo.getRssi();
                 currentRssi.setText("" + signalStrength);
                 currentBand.setText("" + wifiInfo.getFrequency());
-            } else {
-                Log.v(TAG, "BSSID IS NULL :(");
-                Toast.makeText(getActivity(), R.string.update_ui_bssid_null_toast, Toast.LENGTH_SHORT).show();
             }
 
         } else {
