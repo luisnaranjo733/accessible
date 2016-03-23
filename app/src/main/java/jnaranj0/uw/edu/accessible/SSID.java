@@ -39,11 +39,6 @@ public class SSID extends SugarRecord {
         return arrayList;
     }
 
-    public int getNodes() {
-        ArrayList<BSSID> results = getBSSIDs();
-        return results.size();
-    }
-
     public static ArrayList<Long> serialize(ArrayList<SSID> ssids) {
         ArrayList<Long> serialized = new ArrayList<>();
         if (ssids != null) {

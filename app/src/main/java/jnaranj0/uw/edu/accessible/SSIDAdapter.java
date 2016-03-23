@@ -28,7 +28,7 @@ public class SSIDAdapter extends ArrayAdapter<SSID> {
         TextView textViewSSIDName = (TextView) convertView.findViewById(R.id.textViewSSIDName);
         TextView textViewSSIDWapCount = (TextView) convertView.findViewById(R.id.textViewSSIDWapCount);
         textViewSSIDName.setText(ssid.ssid);
-        textViewSSIDWapCount.setText("" + ssid.getNodes());
+        textViewSSIDWapCount.setText("" + ssid.getBSSIDs().size());
         // Return the completed view to render on screen
         return convertView;
     }

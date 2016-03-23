@@ -75,12 +75,7 @@ public class MainActivity extends AppCompatActivity implements HierarchyFragment
      */
     @Override
     public void onSSIDClicked(SSID ssid) {
-        if (detailSSIDFragment != null &&
-                detailSSIDFragment.isVisible() && detailSSIDFragment.ssid.equals(ssid)) {
-            return;
-        }
-
-        detailSSIDFragment = new DetailSSIDFragment();
+        DetailSSIDFragment detailSSIDFragment = new DetailSSIDFragment();
         Bundle bundle = new Bundle();
         bundle.putLong(DetailSSIDFragment.BUNDLE_ARG_SSID_PK, ssid.getId());
                 detailSSIDFragment.setArguments(bundle);
@@ -92,44 +87,9 @@ public class MainActivity extends AppCompatActivity implements HierarchyFragment
         ft.commit();
     }
 
-    /*
-    Called when the user long presses on an SSID's listview item.
-    Results in the ssid and all related bssids from being deleted
-    from the database and from the array adapters
-     */
-    @Override
-    public void onSSIDLongPressed(SSID ssid) {
-        Log.v(TAG, "Long pressed: " + ssid.toString());
-
-        for (BSSID bssid : ssid.getBSSIDs()) {
-            detailSSIDFragment.bssidAdapter.remove(bssid);
-            bssid.delete();
-        }
-
-        hierarchyFragment.ssids.remove(ssid);
-        hierarchyFragment.ssidAdapter.notifyDataSetChanged();
-
-        ssid.delete();
-    }
-
-    /*
-    Called when a new BSSID and SSID are stored
-    Results in the appropriate array adapters being updated
-     */
-    @Override
-    public void onRememberSSID(SSID ssid) {
-        hierarchyFragment.ssidAdapter.add(ssid);
-    }
-
-    @Override
-    public void onRememberBSSID(BSSID bssid) {
-        if (detailSSIDFragment != null && detailSSIDFragment.bssidAdapter != null) {
-            detailSSIDFragment.bssidAdapter.add(bssid);
-        }
-    }
-
     @Override
     public void onSwitchToDetail(SSID ssid) {
+        hierarchyFragment.ssidAdapter.add(ssid);
         onSSIDClicked(ssid);
     }
 

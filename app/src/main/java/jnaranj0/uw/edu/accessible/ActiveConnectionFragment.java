@@ -46,8 +46,6 @@ public class ActiveConnectionFragment extends Fragment {
     private Runnable runnable;
 
     public interface OnSSIDSavedListener {
-        void onRememberSSID(SSID ssid);
-        void onRememberBSSID(BSSID bssid);
         void onSwitchToDetail(SSID ssid);
     }
 
@@ -118,12 +116,11 @@ public class ActiveConnectionFragment extends Fragment {
                             }
 
                             List<SSID> ssidResults = SSID.find(SSID.class, "ssid = ?", ssidString);
-                            boolean ssidCreated = false;
+
                             if (ssidResults.size() == 0) {
                                 SSID ssid = new SSID(ssidString);
                                 ssid.save();
                                 ssidResults.add(ssid);
-                                ssidCreated = true;
                             }
                             SSID ssid = ssidResults.get(0);
 
@@ -134,12 +131,7 @@ public class ActiveConnectionFragment extends Fragment {
                                 BSSID bssid = new BSSID(nickname, bssidString,
                                         wifiInfo.getFrequency(), ssid);
                                 bssid.save();
-                                ((OnSSIDSavedListener) getActivity()).onRememberBSSID(bssid);
                                 Toast.makeText(getActivity(), R.string.alert_remember_wap_toast_bssid_not_exists, Toast.LENGTH_SHORT).show();
-                            }
-
-                            if (ssidCreated) {
-                                ((OnSSIDSavedListener) getActivity()).onRememberSSID(ssid);
                             }
 
                             ((OnSSIDSavedListener) getActivity()).onSwitchToDetail(ssid);
