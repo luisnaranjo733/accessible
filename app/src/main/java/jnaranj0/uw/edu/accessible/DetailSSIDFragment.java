@@ -1,9 +1,8 @@
 package jnaranj0.uw.edu.accessible;
 
 import android.app.DialogFragment;
-import android.content.Context;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -91,7 +90,7 @@ public class DetailSSIDFragment extends Fragment implements ConfirmDeleteDialogF
                 editNicknameDialog.setArguments(bundle);
                 editNicknameDialog.setTargetFragment(DetailSSIDFragment.this,
                         EditNicknameDialog.DIALOG_FRAGMENT);
-                editNicknameDialog.show(getFragmentManager(), null);
+                editNicknameDialog.show(getChildFragmentManager(), null);
             }
         });
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -99,7 +98,7 @@ public class DetailSSIDFragment extends Fragment implements ConfirmDeleteDialogF
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 BSSID bssid = (BSSID) parent.getItemAtPosition(position);
                 Log.v(TAG, "" + bssid.getId() + "Clicked on " + bssid.bssid);
-                DialogFragment confirmDeleteFragment = new ConfirmDeleteDialogFragment();
+                ConfirmDeleteDialogFragment confirmDeleteFragment = new ConfirmDeleteDialogFragment();
 
                 Bundle bundle = new Bundle();
                 bundle.putLong(ConfirmDeleteDialogFragment.BUNDLE_BSSID_PK, bssid.getId());
@@ -107,7 +106,7 @@ public class DetailSSIDFragment extends Fragment implements ConfirmDeleteDialogF
                 confirmDeleteFragment.setArguments(bundle);
                 confirmDeleteFragment.setTargetFragment(DetailSSIDFragment.this,
                         ConfirmDeleteDialogFragment.DIALOG_FRAGMENT);
-                confirmDeleteFragment.show(getFragmentManager(), null);
+                confirmDeleteFragment.show(getChildFragmentManager(), null);
                 return true;
             }
         });
@@ -137,7 +136,8 @@ public class DetailSSIDFragment extends Fragment implements ConfirmDeleteDialogF
         bssidAdapter.remove(dialog.bssid);
         if (bssidAdapter.isEmpty()) {
             dialog.bssid.ssid.delete();
-            getActivity().getFragmentManager().popBackStack();
+            getActivity().getSupportFragmentManager().popBackStack();
+            //Toast.makeText(getActivity(), "Go home", Toast.LENGTH_SHORT).show();
         }
         dialog.bssid.delete();
     }

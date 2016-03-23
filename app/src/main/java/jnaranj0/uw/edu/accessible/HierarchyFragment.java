@@ -4,21 +4,15 @@ package jnaranj0.uw.edu.accessible;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -113,7 +107,7 @@ public class HierarchyFragment extends Fragment implements ConfirmDeleteDialogFr
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 SSID ssid = (SSID) parent.getItemAtPosition(position);
                 Log.v(TAG, "" + ssid.getId() + "Clicked on " + ssid.ssid);
-                DialogFragment confirmDeleteFragment = new ConfirmDeleteDialogFragment();
+                ConfirmDeleteDialogFragment confirmDeleteFragment = new ConfirmDeleteDialogFragment();
 
                 Bundle bundle = new Bundle();
                 bundle.putLong(ConfirmDeleteDialogFragment.BUNDLE_SSID_PK, ssid.getId());
@@ -121,8 +115,7 @@ public class HierarchyFragment extends Fragment implements ConfirmDeleteDialogFr
                 confirmDeleteFragment.setArguments(bundle);
                 confirmDeleteFragment.setTargetFragment(HierarchyFragment.this,
                         ConfirmDeleteDialogFragment.DIALOG_FRAGMENT);
-                confirmDeleteFragment.show(getFragmentManager(), null);
-
+                confirmDeleteFragment.show(getChildFragmentManager(), null);
                 return true;
             }
         });

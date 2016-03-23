@@ -3,13 +3,10 @@ package jnaranj0.uw.edu.accessible;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
-import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.content.DialogInterface;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.text.Editable;
 import android.widget.EditText;
 
 import java.util.List;
