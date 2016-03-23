@@ -13,6 +13,9 @@ import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -60,6 +63,8 @@ public class HierarchyFragment extends Fragment implements ConfirmDeleteDialogFr
 
         ListView listView = (ListView) rootView.findViewById(R.id.listViewSSID);
         listView.setAdapter(ssidAdapter);
+
+        listView.setEmptyView(rootView.findViewById(R.id.emptyElement));
 
         //set alarm item click listener
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

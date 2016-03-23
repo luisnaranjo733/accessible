@@ -18,4 +18,17 @@
         >
 
     </ListView>
+
+    <TextView
+        android:id="@+id/emptyElement"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:text="NO NETWORK INTERFACES STORED YET"
+        android:textColor="#525252"
+        android:textSize="25dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:paddingBottom="40dp"
+        android:gravity="center"
+        android:visibility="gone" />
 </LinearLayout>
