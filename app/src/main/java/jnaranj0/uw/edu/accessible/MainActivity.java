@@ -50,8 +50,8 @@ public class MainActivity extends AppCompatActivity implements HierarchyFragment
         }
 
         if (savedInstanceState == null) {
-            ft.add(R.id.topPane, activeConnectionFragment, null);
-            ft.add(R.id.bottomPane, hierarchyFragment, null);
+            ft.add(R.id.topPane, activeConnectionFragment, ActiveConnectionFragment.TAG);
+            ft.add(R.id.bottomPane, hierarchyFragment, HierarchyFragment.TAG);
             ft.commit();
         } else {
             // this happened once
@@ -82,6 +82,24 @@ public class MainActivity extends AppCompatActivity implements HierarchyFragment
      */
     @Override
     public void onSSIDClicked(SSID ssid) {
+        /*
+        Case A: detailSSIDFragment is null
+                * Create it, show it
+        Case B: detailSSIDFragment is not null
+                * If visible
+                *   If current SSID
+                *       Do nothing
+                *   If not current SSID
+                *       Go to Case A
+                * If not visible
+                *    Case A
+         */
+
+        if (detailSSIDFragment != null &&
+                detailSSIDFragment.isVisible() && detailSSIDFragment.ssid.equals(ssid)) {
+            return;
+        }
+
         detailSSIDFragment = new DetailSSIDFragment();
         Bundle bundle = new Bundle();
         bundle.putLong(DetailSSIDFragment.BUNDLE_ARG_SSID_PK, ssid.getId());
@@ -89,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements HierarchyFragment
 
         FragmentManager manager = getFragmentManager();
         FragmentTransaction ft = manager.beginTransaction();
-        ft.replace(R.id.bottomPane, detailSSIDFragment, null);
+        ft.replace(R.id.bottomPane, detailSSIDFragment, DetailSSIDFragment.TAG);
         ft.addToBackStack(null);
         ft.commit();
     }

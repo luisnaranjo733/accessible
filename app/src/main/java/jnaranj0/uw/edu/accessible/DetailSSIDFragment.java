@@ -24,6 +24,7 @@ public class DetailSSIDFragment extends Fragment implements ConfirmDeleteDialogF
 
     public List<BSSID> bssidList;
     public BSSIDAdapter bssidAdapter;
+    public SSID ssid;
 
     public DetailSSIDFragment() {
         // Required empty public constructor
@@ -40,7 +41,7 @@ public class DetailSSIDFragment extends Fragment implements ConfirmDeleteDialogF
         long pk = bundle.getLong(BUNDLE_ARG_SSID_PK);
         List<SSID> results = SSID.find(SSID.class, "id = ?", "" + pk);
         if (results.size() > 0) {
-            SSID ssid = results.get(0);
+            ssid = results.get(0);
 
             TextView title = (TextView) rootView.findViewById(R.id.textViewSSIDDetailName);
             title.setText(ssid.ssid);
