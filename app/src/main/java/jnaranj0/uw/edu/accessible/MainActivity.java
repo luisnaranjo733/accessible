@@ -29,7 +29,16 @@ public class MainActivity extends AppCompatActivity implements HierarchyFragment
         setContentView(R.layout.activity_main);
         wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 
-        if (savedInstanceState == null) {
+        if (savedInstanceState != null) {
+            // The Activity IS being re-created so we don't need to instantiate the Fragment or add it,
+            // but if we need a reference to it, we can use the tag we passed to .replace
+
+            activeConnectionFragment = (ActiveConnectionFragment) getFragmentManager()
+                    .findFragmentByTag(ActiveConnectionFragment.TAG);
+            hierarchyFragment = (HierarchyFragment) getFragmentManager()
+                    .findFragmentByTag(HierarchyFragment.TAG);
+
+        } else {
             // The Activity is NOT being re-created so we can instantiate a new Fragment
             // and add it to the Activity
 
@@ -40,16 +49,7 @@ public class MainActivity extends AppCompatActivity implements HierarchyFragment
                     .replace(R.id.topPane, activeConnectionFragment, ActiveConnectionFragment.TAG)
                     .replace(R.id.bottomPane, hierarchyFragment, HierarchyFragment.TAG)
                     .commit();
-        } else {
-            // The Activity IS being re-created so we don't need to instantiate the Fragment or add it,
-            // but if we need a reference to it, we can use the tag we passed to .replace
-            activeConnectionFragment = (ActiveConnectionFragment) getFragmentManager()
-                    .findFragmentByTag(ActiveConnectionFragment.TAG);
-            hierarchyFragment = (HierarchyFragment) getFragmentManager()
-                    .findFragmentByTag(HierarchyFragment.TAG);
-
         }
-
     }
 
     @Override
