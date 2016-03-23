@@ -94,6 +94,8 @@ public class ActiveConnectionFragment extends Fragment {
 
 // Set up the input
                 final EditText input = new EditText(getActivity());
+
+
 // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
                 input.setInputType(InputType.TYPE_CLASS_TEXT);
                 builder.setView(input);

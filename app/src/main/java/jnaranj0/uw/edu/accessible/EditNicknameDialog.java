@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.widget.EditText;
@@ -40,12 +43,17 @@ public class EditNicknameDialog extends DialogFragment {
 
         Bundle bundle = getArguments();
         long bssid_pk = bundle.getLong(BUNDLE_BSSID_PK, 0);
+
+        final EditText editText = new EditText(getActivity());
+
         List<BSSID> results = BSSID.find(BSSID.class, "id = ?", "" + bssid_pk);
         if (results.size() > 0) {
             bssid = results.get(0);
+            editText.setText(bssid.nickname);
         }
 
-        final EditText editText = new EditText(getActivity());
+
+
 
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
