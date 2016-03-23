@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -23,10 +24,13 @@ public class DetailSSIDFragment extends Fragment implements ConfirmDeleteDialogF
     public static final String TAG = "ACC_DETAIL";
     public static final String BUNDLE_ARG_SSID_PK = "SSID_PK";
     public static final int DIALOG_FRAGMENT = 1;
+    public static final String STATE_BSSIDS = "bssids";
 
-    public List<BSSID> bssidList;
-    public BSSIDAdapter bssidAdapter;
+    public ArrayList<BSSID> bssids; // stay
+    public BSSIDAdapter bssidAdapter; // stay
+    public ListView listView; // stay
     public SSID ssid;
+
 
     private DetailSSIDListener callback;
 
@@ -64,55 +68,72 @@ public class DetailSSIDFragment extends Fragment implements ConfirmDeleteDialogF
 
             TextView title = (TextView) rootView.findViewById(R.id.textViewSSIDDetailName);
             title.setText(ssid.ssid);
-
-            bssidList = ssid.getBSSIDs();
-
-            bssidAdapter = new BSSIDAdapter(getActivity(), bssidList);
-            ListView listView = (ListView) rootView.findViewById(R.id.listViewBSSID);
-            listView.setAdapter(bssidAdapter);
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    BSSID bssid = (BSSID) parent.getItemAtPosition(position);
-                    // open edit nickname dialog
-                    EditNicknameDialog editNicknameDialog = new EditNicknameDialog();
-                    Bundle bundle = new Bundle();
-                    bundle.putLong(EditNicknameDialog.BUNDLE_BSSID_PK, bssid.getId());
-                    editNicknameDialog.setArguments(bundle);
-                    editNicknameDialog.setTargetFragment(DetailSSIDFragment.this,
-                            EditNicknameDialog.DIALOG_FRAGMENT);
-                    editNicknameDialog.show(getFragmentManager(), null);
-                }
-            });
-            listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                @Override
-                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                    BSSID bssid = (BSSID) parent.getItemAtPosition(position);
-                    Log.v(TAG, "" + bssid.getId() + "Clicked on " + bssid.bssid);
-                    DialogFragment confirmDeleteFragment = new ConfirmDeleteDialogFragment();
-
-                    Bundle bundle = new Bundle();
-                    bundle.putLong(ConfirmDeleteDialogFragment.BUNDLE_BSSID_PK, bssid.getId());
-
-                    confirmDeleteFragment.setArguments(bundle);
-                    confirmDeleteFragment.setTargetFragment(DetailSSIDFragment.this,
-                            ConfirmDeleteDialogFragment.DIALOG_FRAGMENT);
-                    confirmDeleteFragment.show(getFragmentManager(), null);
-                    return true;
-                }
-            });
-
-
         }
+        listView = (ListView) rootView.findViewById(R.id.listViewBSSID);
 
         return rootView;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            ArrayList<Long> serialized = (ArrayList<Long>) savedInstanceState.getSerializable(STATE_BSSIDS);
+            bssids = BSSID.unserialize(serialized);
+
+        } else {
+            bssids = new ArrayList<>();
+            // converting from List to ArrayList
+            for (BSSID bssid : ssid.getBSSIDs()) {
+                bssids.add(bssid);
+            }
+        }
+        bssidAdapter = new BSSIDAdapter(getActivity(), bssids);
+        listView.setAdapter(bssidAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                BSSID bssid = (BSSID) parent.getItemAtPosition(position);
+                // open edit nickname dialog
+                EditNicknameDialog editNicknameDialog = new EditNicknameDialog();
+                Bundle bundle = new Bundle();
+                bundle.putLong(EditNicknameDialog.BUNDLE_BSSID_PK, bssid.getId());
+                editNicknameDialog.setArguments(bundle);
+                editNicknameDialog.setTargetFragment(DetailSSIDFragment.this,
+                        EditNicknameDialog.DIALOG_FRAGMENT);
+                editNicknameDialog.show(getFragmentManager(), null);
+            }
+        });
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                BSSID bssid = (BSSID) parent.getItemAtPosition(position);
+                Log.v(TAG, "" + bssid.getId() + "Clicked on " + bssid.bssid);
+                DialogFragment confirmDeleteFragment = new ConfirmDeleteDialogFragment();
+
+                Bundle bundle = new Bundle();
+                bundle.putLong(ConfirmDeleteDialogFragment.BUNDLE_BSSID_PK, bssid.getId());
+
+                confirmDeleteFragment.setArguments(bundle);
+                confirmDeleteFragment.setTargetFragment(DetailSSIDFragment.this,
+                        ConfirmDeleteDialogFragment.DIALOG_FRAGMENT);
+                confirmDeleteFragment.show(getFragmentManager(), null);
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(STATE_BSSIDS, BSSID.serialize(bssids));
     }
 
     @Override
     public void onConfirmDelete(ConfirmDeleteDialogFragment dialog) {
         bssidAdapter.remove(dialog.bssid);
         if (bssidAdapter.isEmpty()) {
-            //callback.onBSSIDAdapterEmpty();
             dialog.bssid.ssid.delete();
             ((DetailSSIDListener) getActivity()).onBSSIDAdapterEmpty();
         }
@@ -120,13 +141,8 @@ public class DetailSSIDFragment extends Fragment implements ConfirmDeleteDialogF
     }
 
     @Override
-    public void onCancelDelete(ConfirmDeleteDialogFragment dialog) {
-    }
-
-
-    @Override
     public void onChangeNickname(BSSID updatedBSSID, String nickname) {
-        for (BSSID bssid : bssidList) {
+        for (BSSID bssid : bssids) {
             if (bssid.equals(updatedBSSID)) {
                 bssid.nickname = nickname;
                 bssid.save();

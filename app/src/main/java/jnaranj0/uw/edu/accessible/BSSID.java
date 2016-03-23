@@ -2,6 +2,7 @@ package jnaranj0.uw.edu.accessible;
 
 import com.orm.SugarRecord;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BSSID extends SugarRecord {
@@ -49,5 +50,25 @@ public class BSSID extends SugarRecord {
         } else {
             return "" + frequency + " mhz";
         }
+    }
+
+    public static ArrayList<Long> serialize(ArrayList<BSSID> bssids) {
+        ArrayList<Long> serialized = new ArrayList<>();
+        if (bssids != null) {
+            for (BSSID bssid : bssids) {
+                serialized.add(bssid.getId());
+            }
+        }
+        return serialized;
+    }
+
+    public static ArrayList<BSSID> unserialize(ArrayList<Long> primaryKeys){
+        ArrayList<BSSID> unserialized = new ArrayList<>();
+        for (long pk : primaryKeys) {
+            List<BSSID> results = BSSID.find(BSSID.class, "id = ?", "" + pk);
+            BSSID bssid = results.get(0);
+            unserialized.add(bssid);
+        }
+        return unserialized;
     }
 }

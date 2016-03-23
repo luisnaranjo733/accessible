@@ -31,6 +31,7 @@ public class HierarchyFragment extends Fragment implements ConfirmDeleteDialogFr
     public SSIDAdapter ssidAdapter;
     public ArrayList<SSID> ssids;
     public ListView listView;
+
     private OnSSIDClickedListener callback;
 
     public interface OnSSIDClickedListener {
@@ -128,11 +129,6 @@ public class HierarchyFragment extends Fragment implements ConfirmDeleteDialogFr
             bssid.delete();
         }
         dialog.ssid.delete();
-    }
-
-    @Override
-    public void onCancelDelete(ConfirmDeleteDialogFragment dialog) {
-
     }
 
 }

@@ -22,7 +22,6 @@ public class ConfirmDeleteDialogFragment extends DialogFragment {
 
     public interface OnConfirmDeleteListener{
         void onConfirmDelete(ConfirmDeleteDialogFragment dialog);
-        void onCancelDelete(ConfirmDeleteDialogFragment dialog);
     }
 
     public ConfirmDeleteDialogFragment() {
@@ -86,7 +85,6 @@ public class ConfirmDeleteDialogFragment extends DialogFragment {
                 .setNegativeButton(R.string.alert_negative_button, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // User cancelled the dialog
-                        mListener.onCancelDelete(ConfirmDeleteDialogFragment.this);
                     }
                 });
         // Create the AlertDialog object and return it
