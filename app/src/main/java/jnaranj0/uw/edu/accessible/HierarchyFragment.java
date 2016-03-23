@@ -1,11 +1,8 @@
 package jnaranj0.uw.edu.accessible;
 
-
-import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +11,6 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class HierarchyFragment extends Fragment implements ConfirmDeleteDialogFragment.OnConfirmDeleteListener {
     public static final String TAG = "**ACC_HIERARCHY";
     public static final String STATE_SSIDS = "ssids";
@@ -25,6 +18,8 @@ public class HierarchyFragment extends Fragment implements ConfirmDeleteDialogFr
     public SSIDAdapter ssidAdapter;
     public ArrayList<SSID> ssids;
     public ListView listView;
+
+    Bundle instanceState;
 
     private OnSSIDClickedListener callback;
 
@@ -47,15 +42,16 @@ public class HierarchyFragment extends Fragment implements ConfirmDeleteDialogFr
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
-            if (isVisible()) {
-                Log.i(TAG, "onCreate should restore state here");
-            } else {
-                Log.i(TAG, "onCreate should NOT restore state here");
+            ArrayList<Long> data = (ArrayList<Long>) savedInstanceState.getSerializable(STATE_SSIDS);
+            if (data != null && !data.isEmpty()) {
+                instanceState = savedInstanceState;
             }
+
         }
     }
 
@@ -76,9 +72,16 @@ public class HierarchyFragment extends Fragment implements ConfirmDeleteDialogFr
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null) {
-            ArrayList<Long> serialized = (ArrayList<Long>) savedInstanceState.getSerializable(STATE_SSIDS);
+            ArrayList<Long> serialized;
+            if (instanceState ==null) {
+                // if the user rotates the screen twice, this savedInstanceState will be empty
+                // because android only calls onCreate
+                serialized = (ArrayList<Long>) savedInstanceState.getSerializable(STATE_SSIDS);
+            } else {
+                // instanceState is intercepted and saved in onCreate in the above case occurs
+                serialized = (ArrayList<Long>) instanceState.getSerializable(STATE_SSIDS);
+            }
             ssids = SSID.unserialize(serialized);
-            Log.i(TAG, "Restoring state");
 
         } else {
             ssids = new ArrayList<>();
@@ -86,7 +89,6 @@ public class HierarchyFragment extends Fragment implements ConfirmDeleteDialogFr
             for (SSID ssid : SSID.listAll(SSID.class)) {
                 ssids.add(ssid);
             }
-            Log.i(TAG, "Creating state");
         }
 
         ssidAdapter = new SSIDAdapter(getActivity(), ssids);
@@ -106,7 +108,6 @@ public class HierarchyFragment extends Fragment implements ConfirmDeleteDialogFr
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 SSID ssid = (SSID) parent.getItemAtPosition(position);
-                Log.v(TAG, "" + ssid.getId() + "Clicked on " + ssid.ssid);
                 ConfirmDeleteDialogFragment confirmDeleteFragment = new ConfirmDeleteDialogFragment();
 
                 Bundle bundle = new Bundle();
@@ -122,26 +123,9 @@ public class HierarchyFragment extends Fragment implements ConfirmDeleteDialogFr
     }
 
     @Override
-    public void onViewStateRestored(Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        if (savedInstanceState != null) {
-            // Restore some state that needs to happen after our own views have had
-            // their state restored
-            // DON'T try to restore ListViews here because their scroll position will
-            // not be restored properly
-            Log.i(TAG, "onViewStateRestored");
-        }
-    }
-
-    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(STATE_SSIDS, SSID.serialize(ssids));
-        if (ssids != null) {
-            Log.i(TAG, "Saving state: " + ssids.size());
-        } else {
-            Log.i(TAG, "Saving state");
-        }
     }
 
 

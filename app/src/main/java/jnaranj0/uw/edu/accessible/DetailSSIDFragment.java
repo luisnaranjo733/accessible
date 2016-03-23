@@ -35,14 +35,6 @@ public class DetailSSIDFragment extends Fragment implements ConfirmDeleteDialogF
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (savedInstanceState != null) {
-            Log.i(TAG, "Could restore state from onCreate");
-        }
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -66,16 +58,16 @@ public class DetailSSIDFragment extends Fragment implements ConfirmDeleteDialogF
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null) {
+            // restoring state
             ArrayList<Long> serialized = (ArrayList<Long>) savedInstanceState.getSerializable(STATE_BSSIDS);
             bssids = BSSID.unserialize(serialized);
-            Log.i(TAG, "Restoring state");
         } else {
+            // creating state
             bssids = new ArrayList<>();
             // converting from List to ArrayList
             for (BSSID bssid : ssid.getBSSIDs()) {
                 bssids.add(bssid);
             }
-            Log.i(TAG, "Creating state");
         }
         bssidAdapter = new BSSIDAdapter(getActivity(), bssids);
         listView.setAdapter(bssidAdapter);
@@ -97,7 +89,6 @@ public class DetailSSIDFragment extends Fragment implements ConfirmDeleteDialogF
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 BSSID bssid = (BSSID) parent.getItemAtPosition(position);
-                Log.v(TAG, "" + bssid.getId() + "Clicked on " + bssid.bssid);
                 ConfirmDeleteDialogFragment confirmDeleteFragment = new ConfirmDeleteDialogFragment();
 
                 Bundle bundle = new Bundle();
@@ -113,22 +104,9 @@ public class DetailSSIDFragment extends Fragment implements ConfirmDeleteDialogF
     }
 
     @Override
-    public void onViewStateRestored(Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        if (savedInstanceState != null) {
-            // Restore some state that needs to happen after our own views have had
-            // their state restored
-            // DON'T try to restore ListViews here because their scroll position will
-            // not be restored properly
-            Log.i(TAG, "onViewStateRestored");
-        }
-    }
-
-    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(STATE_BSSIDS, BSSID.serialize(bssids));
-        Log.i(TAG, "Saving state: " + bssids.size());
     }
 
     @Override
@@ -137,7 +115,6 @@ public class DetailSSIDFragment extends Fragment implements ConfirmDeleteDialogF
         if (bssidAdapter.isEmpty()) {
             dialog.bssid.ssid.delete();
             getActivity().getSupportFragmentManager().popBackStack();
-            //Toast.makeText(getActivity(), "Go home", Toast.LENGTH_SHORT).show();
         }
         dialog.bssid.delete();
     }

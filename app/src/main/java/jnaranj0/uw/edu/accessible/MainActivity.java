@@ -17,7 +17,6 @@ public class MainActivity extends AppCompatActivity implements HierarchyFragment
 
     public HierarchyFragment hierarchyFragment;
     public ActiveConnectionFragment activeConnectionFragment;
-    public DetailSSIDFragment detailSSIDFragment;
 
     WifiManager wifiManager;
 
@@ -33,8 +32,10 @@ public class MainActivity extends AppCompatActivity implements HierarchyFragment
 
             activeConnectionFragment =  (ActiveConnectionFragment) getSupportFragmentManager()
                     .findFragmentByTag(ActiveConnectionFragment.TAG);
+
             hierarchyFragment = (HierarchyFragment) getSupportFragmentManager()
                     .findFragmentByTag(HierarchyFragment.TAG);
+            hierarchyFragment.setRetainInstance(true);
 
         } else {
             // The Activity is NOT being re-created so we can instantiate a new Fragment
