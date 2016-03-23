@@ -104,15 +104,12 @@ public class MainActivity extends AppCompatActivity implements HierarchyFragment
 
     @Override
     public void onBSSIDAdapterEmpty() {
+        getFragmentManager().popBackStack();
 
-        if (hierarchyFragment == null) {
-            hierarchyFragment = new HierarchyFragment();
-        }
-
-        FragmentManager manager = getFragmentManager();
-        FragmentTransaction ft = manager.beginTransaction();
-        ft.replace(R.id.bottomPane, hierarchyFragment, HierarchyFragment.TAG);
-        //ft.addToBackStack(null);
-        ft.commit();
+//        FragmentManager manager = getFragmentManager();
+//        FragmentTransaction ft = manager.beginTransaction();
+//        ft.replace(R.id.bottomPane, hierarchyFragment, HierarchyFragment.TAG);
+//        //ft.addToBackStack(null);
+//        ft.commit();
     }
 }
