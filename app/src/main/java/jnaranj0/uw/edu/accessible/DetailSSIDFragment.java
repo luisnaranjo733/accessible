@@ -31,24 +31,6 @@ public class DetailSSIDFragment extends Fragment implements ConfirmDeleteDialogF
     public ListView listView; // stay
     public SSID ssid;
 
-
-    private DetailSSIDListener callback;
-
-    public interface DetailSSIDListener {
-        void onBSSIDAdapterEmpty();
-    }
-
-
-    @Override
-    public void onAttach(Context context){
-        super.onAttach(context);
-
-        try {
-            callback = (DetailSSIDListener) context;
-        }catch(ClassCastException e){
-            throw new ClassCastException(context.toString() + " must implement DetailSSIDListener");
-        }
-    }
     public DetailSSIDFragment() {
         // Required empty public constructor
     }
@@ -135,7 +117,7 @@ public class DetailSSIDFragment extends Fragment implements ConfirmDeleteDialogF
         bssidAdapter.remove(dialog.bssid);
         if (bssidAdapter.isEmpty()) {
             dialog.bssid.ssid.delete();
-            ((DetailSSIDListener) getActivity()).onBSSIDAdapterEmpty();
+            getActivity().getFragmentManager().popBackStack();
         }
         dialog.bssid.delete();
     }
