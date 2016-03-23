@@ -20,7 +20,7 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class DetailSSIDFragment extends Fragment implements ConfirmDeleteDialogFragment.OnConfirmDeleteListener, EditNicknameDialog.OnChangeNicknameListener {
-    public static final String TAG = "**DetailFrag";
+    public static final String TAG = "ACC_DETAIL";
     public static final String BUNDLE_ARG_SSID_PK = "SSID_PK";
     public static final int DIALOG_FRAGMENT = 1;
 

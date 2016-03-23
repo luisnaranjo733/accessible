@@ -29,7 +29,7 @@ import java.util.List;
  */
 public class ActiveConnectionFragment extends Fragment {
 
-    public static final String TAG = "**activeConnFrag";
+    public static final String TAG = "**ACC_ACTIVE";
     public static final int UI_UPDATE_PERIOD = 500;
     private OnSSIDSavedListener callback;
 

@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -24,10 +25,12 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class HierarchyFragment extends Fragment implements ConfirmDeleteDialogFragment.OnConfirmDeleteListener {
-    public static final String TAG = "**HierarchyFrag";
+    public static final String TAG = "**ACC_HIERARCHY";
+    public static final String STATE_SSIDS = "ssids";
 
     public SSIDAdapter ssidAdapter;
-    public List<SSID> ssids;
+    public ArrayList<SSID> ssids;
+    public ListView listView;
     private OnSSIDClickedListener callback;
 
     public interface OnSSIDClickedListener {
@@ -55,16 +58,32 @@ public class HierarchyFragment extends Fragment implements ConfirmDeleteDialogFr
                              Bundle savedInstanceState) {
 
         final View rootView = inflater.inflate(R.layout.fragment_hierarchy, container, false);
+        listView = (ListView) rootView.findViewById(R.id.listViewSSID);
+        listView.setEmptyView(rootView.findViewById(R.id.emptyElement));
 
-        // create array adapter for ssids
-        ssids = SSID.listAll(SSID.class);
+        // Inflate the layout for this fragment
+        return rootView;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            ArrayList<Long> serialized = (ArrayList<Long>) savedInstanceState.getSerializable(STATE_SSIDS);
+            ssids = SSID.unserialize(serialized);
+
+        } else {
+            ssids = new ArrayList<>();
+            // converting from List to ArrayList
+            for (SSID ssid : SSID.listAll(SSID.class)) {
+                ssids.add(ssid);
+            }
+        }
 
         ssidAdapter = new SSIDAdapter(getActivity(), ssids);
-
-        ListView listView = (ListView) rootView.findViewById(R.id.listViewSSID);
         listView.setAdapter(ssidAdapter);
 
-        listView.setEmptyView(rootView.findViewById(R.id.emptyElement));
 
         //set alarm item click listener
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -93,10 +112,14 @@ public class HierarchyFragment extends Fragment implements ConfirmDeleteDialogFr
                 return true;
             }
         });
-
-        // Inflate the layout for this fragment
-        return rootView;
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(STATE_SSIDS, SSID.serialize(ssids));
+    }
+
 
     @Override
     public void onConfirmDelete(ConfirmDeleteDialogFragment dialog) {

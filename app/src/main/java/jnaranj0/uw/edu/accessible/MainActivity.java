@@ -15,13 +15,11 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements HierarchyFragment.OnSSIDClickedListener, ActiveConnectionFragment.OnSSIDSavedListener, DetailSSIDFragment.DetailSSIDListener {
-    public static final String TAG = "**accessible";
+    public static final String TAG = "**ACC_MAIN";
 
-    FrameLayout topPane;
-    FrameLayout bottomPane;
-    HierarchyFragment hierarchyFragment;
-    ActiveConnectionFragment activeConnectionFragment;
-    DetailSSIDFragment detailSSIDFragment;
+    public HierarchyFragment hierarchyFragment;
+    public ActiveConnectionFragment activeConnectionFragment;
+    public DetailSSIDFragment detailSSIDFragment;
 
     WifiManager wifiManager;
 
@@ -31,32 +29,27 @@ public class MainActivity extends AppCompatActivity implements HierarchyFragment
         setContentView(R.layout.activity_main);
         wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 
-        topPane = (FrameLayout) findViewById(R.id.topPane);
-        bottomPane = (FrameLayout) findViewById(R.id.bottomPane);
-
-        hierarchyFragment = new HierarchyFragment();
-        activeConnectionFragment = new ActiveConnectionFragment();
-
-
-        FragmentManager manager = getFragmentManager();
-        if (manager.findFragmentById(R.id.bottomPane) != null) {
-            // this happened once
-            Log.e(TAG, "FREAKING !Empty!!!!");
-        }
-        FragmentTransaction ft = manager.beginTransaction();
-
-        if (!ft.isEmpty()) {
-            Log.e(TAG, "!EMPTY!!!!!!!");
-        }
-
         if (savedInstanceState == null) {
-            ft.add(R.id.topPane, activeConnectionFragment, ActiveConnectionFragment.TAG);
-            ft.add(R.id.bottomPane, hierarchyFragment, HierarchyFragment.TAG);
-            ft.commit();
+            // The Activity is NOT being re-created so we can instantiate a new Fragment
+            // and add it to the Activity
+
+            activeConnectionFragment = new ActiveConnectionFragment();
+            hierarchyFragment = new HierarchyFragment();
+
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.topPane, activeConnectionFragment, ActiveConnectionFragment.TAG)
+                    .replace(R.id.bottomPane, hierarchyFragment, HierarchyFragment.TAG)
+                    .commit();
         } else {
-            // this happened once
-            Log.v(TAG, "RECREATED ACTIVITY");
+            // The Activity IS being re-created so we don't need to instantiate the Fragment or add it,
+            // but if we need a reference to it, we can use the tag we passed to .replace
+            activeConnectionFragment = (ActiveConnectionFragment) getFragmentManager()
+                    .findFragmentByTag(ActiveConnectionFragment.TAG);
+            hierarchyFragment = (HierarchyFragment) getFragmentManager()
+                    .findFragmentByTag(HierarchyFragment.TAG);
+
         }
+
     }
 
     @Override

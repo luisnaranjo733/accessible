@@ -2,22 +2,22 @@ package jnaranj0.uw.edu.accessible;
 
 import com.orm.SugarRecord;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SSID extends SugarRecord {
     String ssid;
     //Location
 
-    public SSID() {
-
-    }
+    public SSID() {}
 
     public SSID(String ssid) {
         this.ssid = ssid;
     }
 
     public String toString() {
-        return ssid + this.getId();
+        return ssid;
     }
 
     @Override
@@ -31,12 +31,36 @@ public class SSID extends SugarRecord {
     }
 
     // Get all BSSIDs from this SSID
-    List<BSSID> getBSSIDs() {
-        return BSSID.find(BSSID.class, "ssid = ?", "" + getId());
+    ArrayList<BSSID> getBSSIDs() {
+        ArrayList<BSSID> arrayList = new ArrayList<>();
+        for (BSSID bssid: BSSID.find(BSSID.class, "ssid = ?", "" + getId())) {
+            arrayList.add(bssid);
+        }
+        return arrayList;
     }
 
     public int getNodes() {
-        List<BSSID> results = getBSSIDs();
+        ArrayList<BSSID> results = getBSSIDs();
         return results.size();
+    }
+
+    public static ArrayList<Long> serialize(ArrayList<SSID> ssids) {
+        ArrayList<Long> serialized = new ArrayList<>();
+        if (ssids != null) {
+            for (SSID ssid : ssids) {
+                serialized.add(ssid.getId());
+            }
+        }
+        return serialized;
+    }
+
+    public static ArrayList<SSID> unserialize(ArrayList<Long> primaryKeys){
+        ArrayList<SSID> unserialized = new ArrayList<>();
+        for (long pk : primaryKeys) {
+            List<SSID> results = SSID.find(SSID.class, "id = ?", "" + pk);
+            SSID ssid = results.get(0);
+            unserialized.add(ssid);
+        }
+        return unserialized;
     }
 }
