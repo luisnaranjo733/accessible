@@ -3,6 +3,7 @@ package jnaranj0.uw.edu.accessible;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,10 +77,12 @@ public class HierarchyFragment extends Fragment implements ConfirmDeleteDialogFr
             if (instanceState ==null) {
                 // if the user rotates the screen twice, this savedInstanceState will be empty
                 // because android only calls onCreate
+                //Log.i(TAG, "A");
                 serialized = (ArrayList<Long>) savedInstanceState.getSerializable(STATE_SSIDS);
             } else {
                 // instanceState is intercepted and saved in onCreate in the above case occurs
                 serialized = (ArrayList<Long>) instanceState.getSerializable(STATE_SSIDS);
+                //Log.i(TAG, "B");
             }
             ssids = SSID.unserialize(serialized);
 
@@ -89,6 +92,7 @@ public class HierarchyFragment extends Fragment implements ConfirmDeleteDialogFr
             for (SSID ssid : SSID.listAll(SSID.class)) {
                 ssids.add(ssid);
             }
+            //Log.i(TAG, "c");
         }
 
         ssidAdapter = new SSIDAdapter(getActivity(), ssids);

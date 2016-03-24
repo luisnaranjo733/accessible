@@ -29,7 +29,7 @@ import java.util.List;
 public class ActiveConnectionFragment extends Fragment {
 
     public static final String TAG = "**ACC_ACTIVE";
-    public static final int UI_UPDATE_PERIOD = 500;
+    public static final int UI_UPDATE_PERIOD = 250;
     private OnSSIDSavedListener callback;
 
     private TextView currentNetworkState;
@@ -45,7 +45,7 @@ public class ActiveConnectionFragment extends Fragment {
     private Runnable runnable;
 
     public interface OnSSIDSavedListener {
-        void onSwitchToDetail(SSID ssid);
+        void onSwitchToDetail(SSID ssid, BSSID bssid);
     }
 
 
@@ -126,14 +126,17 @@ public class ActiveConnectionFragment extends Fragment {
                             // and with our ssid?
                             List<BSSID> bssidResults = BSSID.find(BSSID.class, "bssid = ?", bssidString);
 
+                            BSSID bssid;
                             if (bssidResults.size() == 0) {
-                                BSSID bssid = new BSSID(nickname, bssidString,
+                                bssid = new BSSID(nickname, bssidString,
                                         wifiInfo.getFrequency(), ssid);
                                 bssid.save();
                                 Toast.makeText(getActivity(), R.string.alert_remember_wap_toast_bssid_not_exists, Toast.LENGTH_SHORT).show();
+                            } else {
+                                bssid = bssidResults.get(0);
                             }
 
-                            ((OnSSIDSavedListener) getActivity()).onSwitchToDetail(ssid);
+                            ((OnSSIDSavedListener) getActivity()).onSwitchToDetail(ssid, bssid);
 
                         }
                     }
@@ -204,7 +207,12 @@ public class ActiveConnectionFragment extends Fragment {
                 List<BSSID> results = BSSID.find(BSSID.class, "bssid = ?" , bssidRepr);
                 if (results.size() > 0) {
                     BSSID bssid = results.get(0);
-                    currentBSSID.setText(bssid.nickname);
+                    if (bssid.nickname == null || bssid.nickname.equals("")) {
+                        currentBSSID.setText(bssid.bssid);
+                    } else {
+                        currentBSSID.setText(bssid.nickname);
+                    }
+
                     rememberWAPButton.setPaintFlags(rememberWAPButton.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                     rememberWAPButton.setEnabled(false);
                 } else {
