@@ -13,3 +13,18 @@ Full Description
 
 * View the details of your current WiFi's connection in real time (band, channel, ssid, bssid, and rssi).
 * Quickly identify BSSIDs by giving them nicknames (WAP 1 2.4ghz, WAP 2 5ghz, etc...)
+
+Two Screenshots
+===============
+
+Hi-res Icon
+===========
+
+512 x 512
+32-bit PNG (with alpha)
+
+Feature Graphic
+===============
+
+1024 w x 500 h
+JPG or 24-bit PNG (no alpha)
