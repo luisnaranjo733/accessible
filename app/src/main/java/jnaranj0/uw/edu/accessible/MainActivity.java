@@ -73,22 +73,6 @@ public class MainActivity extends AppCompatActivity implements HierarchyFragment
     /*
 
     This method is used for transitioning to the DetailSSIDFragment
-
-    Case A (bssid == null):
-    Currently on HierarchyFragment, and the user pressed on an item in the listview.
-    The HierarchyFragment calls this method back, and then we switch to detail frag.
-    * Create new DetailSSIDFragment through fragment transaction
-
-    Case B (bssid != null):
-    Currently already on DetailSSIDFragment. This is possible because the rememberWAPButton
-    in ActiveConnectionFragment also calls this method when a new BSSID is added, with the
-    intention of transitioning to the appropriate detail view.
-
-    Case B.1: Current DetailSSIDFragment is for the same SSID we are passed as a param
-        *
-    Case B.2: Current DetailSSIDFragment is NOT for the same SSID we are passed as a param
-        * pop back stack
-        * Create new DetailSSIDFragment through fragment transaction
     */
 
     @Override
@@ -100,17 +84,17 @@ public class MainActivity extends AppCompatActivity implements HierarchyFragment
                 .findFragmentByTag(DetailSSIDFragment.TAG);
 
         if (detailSSIDFragment == null) {
+            detailSSIDFragment = new DetailSSIDFragment();
+            Bundle bundle = new Bundle();
+            bundle.putLong(DetailSSIDFragment.BUNDLE_ARG_SSID_PK, ssid.getId());
+            detailSSIDFragment.setArguments(bundle);
+
+            ft.replace(R.id.bottomPane, detailSSIDFragment, DetailSSIDFragment.TAG);
             ft.addToBackStack(null);
+            ft.commit();
         }
 
-        detailSSIDFragment = new DetailSSIDFragment();
-        Bundle bundle = new Bundle();
-        bundle.putLong(DetailSSIDFragment.BUNDLE_ARG_SSID_PK, ssid.getId());
-        detailSSIDFragment.setArguments(bundle);
 
-        ft.replace(R.id.bottomPane, detailSSIDFragment, DetailSSIDFragment.TAG);
-        ft.addToBackStack(null);
-        ft.commit();
     }
 
     // this gets called when a new base station is remembered
