@@ -87,7 +87,7 @@ public class ActiveConnectionFragment extends Fragment {
             public void onClick(View v) {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle(R.string.alert_remember_wap_title);
+                builder.setTitle(R.string.alert_save_bssid_title);
 
 // Set up the input
                 final EditText input = new EditText(getActivity());
@@ -96,7 +96,7 @@ public class ActiveConnectionFragment extends Fragment {
 // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
                 input.setInputType(InputType.TYPE_CLASS_TEXT);
                 builder.setView(input);
-                builder.setMessage(R.string.alert_remember_wap_message);
+                builder.setMessage(R.string.alert_save_bssid_message);
 
 // Set up the buttons
                 builder.setPositiveButton(R.string.alert_positive_button, new DialogInterface.OnClickListener() {

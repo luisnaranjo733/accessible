@@ -26,4 +26,7 @@
     <string name="alert_edit_nickname_title">Edit BSSID Nickname</string>
     <string name="alert_edit_nickname_message">BSSID: </string>
 
+    <!-- SaveBSSIDDialog (inline in ActiveConnectionFragment) -->
+    <string name="alert_save_bssid_title">Remember this connection</string>
+    <string name="alert_save_bssid_message">Remember the current wireless interface for this SSID (2.4 ghz or 5ghz)</string>
 </resources>
