@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">accessible</string>
+    <string name="app_name">ESS Analyzer</string>
 
     <!-- Menu options -->
     <string name="menu_option_force_wifi_handoff">Force WiFi handoff</string>

@@ -1,0 +1,15 @@
+Title
+=====
+
+Wifi Handoff Analyzer
+
+Short Description
+=================
+
+View your device's WiFi handoffs in extended service set networks in real time!
+
+Full Description
+================
+
+* View the details of your current WiFi's connection in real time (band, channel, ssid, bssid, and rssi).
+* Quickly identify BSSIDs by giving them nicknames (WAP 1 2.4ghz, WAP 2 5ghz, etc...)
