@@ -8,18 +8,4 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="FragmentTitle" parent="AppTheme">
-        <item name="android:textSize">15dp</item>
-        <item name="android:layout_gravity">center</item>
-        <item name="android:layout_marginTop">10dp</item>
-        <item name="android:layout_marginBottom">10dp</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Headline</item>
-    </style>
-
-    <style name="ItemBSSIDBold" parent="AppTheme">
-        <item name="android:textSize">15dp</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
 </resources>
